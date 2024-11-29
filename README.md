@@ -1,3 +1,15 @@
+<div align="center">
+  <h1>[PROJECT TITLE]</h1>
+
+  <p>[Project description</p>
+</div>
+
+## Build
+
+- `npm run build`
+- `npm run watch`
+
+# OLD
 ## Examples
 
 You can run the examples from the section below, simply by running the server given in the `./examples` directory:

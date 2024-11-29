@@ -1,2 +1,4 @@
-deno.lock
-examples/demo/messages.txt
+node_modules/
+package-lock.json
+tsconfig.tsbuildinfo
+dist/src
