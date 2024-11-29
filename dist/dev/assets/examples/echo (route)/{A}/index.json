@@ -1,0 +1,7 @@
+{
+    "method": "GET",
+    "route" : "/echo (route)/{A}",
+    "query" : {
+        "url"  : "/echo (route)/foo"
+    }
+}

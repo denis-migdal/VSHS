@@ -1,0 +1,8 @@
+{
+    "method": "GET",
+    "route" : "/Hello World",
+    "query" : {
+        "url"  : "/Hello World",
+        "body" : "coucou"
+    }
+}

@@ -332,7 +332,7 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 
 // tests
 
-function path2regex(path: string) {
+export function path2regex(path: string) {
 
 	// Escape special characters.
 	// cf https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
@@ -341,7 +341,7 @@ function path2regex(path: string) {
 	return new RegExp("^" + path.replace(/\\\{[^\}]+\\\}/g, (captured) => `(?<${captured.slice(2,-2)}>[^/]+)`) + "$");
 }
 
-function match(regex: RegExp, uri: string) {
+export function match(regex: RegExp, uri: string) {
 
 	let result = regex.exec(uri);
 
