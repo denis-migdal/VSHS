@@ -107,7 +107,10 @@ async function _fetchText(uri, isLissAuto = false) {
         return undefined;
     if (isLissAuto && response.headers.get("status") === "404")
         return undefined;
-    return await response.text();
+    const answer = await response.text();
+    if (answer === "")
+        return undefined;
+    return answer;
 }
 async function _import(uri, isLissAuto = false) {
     // test for the module existance.
@@ -201,12 +204,15 @@ const bry_wrapper = `def wrapjs(js_klass):
 `;
 async function importComponent(tagname, { cdir = null, brython = false, 
 // @ts-ignore
-host = HTMLElement, files = {} }) {
+host = HTMLElement, files = null }) {
     KnownTags.add(tagname);
     const compo_dir = `${cdir}${tagname}/`;
-    if (brython) {
-        if (!("index.bry" in files))
-            files['index.bry'] = (await _fetchText(`${compo_dir}index.bry`, true));
+    if (files === null) {
+        files = {};
+        const file = brython ? 'index.bry' : 'index.js';
+        files[file] = (await _fetchText(`${compo_dir}${file}`, true));
+    }
+    if (brython && files['index.bry'] !== undefined) {
         const code = bry_wrapper + files["index.bry"];
         files['index.js'] =
             `const $B = globalThis.__BRYTHON__;
@@ -218,10 +224,6 @@ const last = imported[imported.length-1];
 export default last.WebComponent;
 
 `;
-    }
-    else {
-        if (!("index.js" in files))
-            files['index.js'] = (await _fetchText(`${compo_dir}index.js`, true));
     }
     const html = files["index.html"];
     const css = files["index.css"];

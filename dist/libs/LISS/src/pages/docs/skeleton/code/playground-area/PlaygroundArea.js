@@ -1,7 +1,8 @@
 import LISS from "../../../../../index";
 import CodeBlock from "../code-block/CodeBlock";
+export const rootdir = location.host === "denis-migdal.github.io" ? "/LISS" : "";
 //TODO : path
-export const ASSETS = "/dist/dev/assets/examples";
+export const ASSETS = `${rootdir}/dist/dev/assets/examples`;
 // @ts-ignore
 import css from "!!raw-loader!./PlaygroundArea.css";
 export default class PlaygroundArea extends LISS({
@@ -111,21 +112,24 @@ export default class PlaygroundArea extends LISS({
         }
         return result;
     }
+    #lastURL = null;
     async updateResult() {
         const iframe = document.createElement('iframe');
         this.#iframe.replaceWith(iframe);
         this.#iframe = iframe;
-        const content = await this.generateIFrameContent();
+        let content = await this.generateIFrameContent();
+        /* doesn't work
+        if( ! (content instanceof Blob) ) {
+            content = new Blob([content], {type: "text/html"});
+        }
+        */
         if (content instanceof Blob) {
-            const url = URL.createObjectURL(content);
-            console.warn(url);
-            iframe.src = url;
+            if (this.#lastURL !== null)
+                URL.revokeObjectURL(this.#lastURL);
+            this.#lastURL = iframe.src = URL.createObjectURL(content);
             return;
         }
-        /*const blob = new Blob([content], {type: "text/html"})
-        const url = URL.createObjectURL(blob);
-
-        iframe.src = url;*/
+        /**/
         iframe.src = "about:blank";
         // iframe.srcdoc also possible
         iframe.contentWindow.document.open();
