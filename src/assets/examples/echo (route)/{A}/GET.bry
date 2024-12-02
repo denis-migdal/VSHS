@@ -1,2 +1,2 @@
 def Rule(query):
-    return query.url
+    return query.route
