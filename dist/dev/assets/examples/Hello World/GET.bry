@@ -1,2 +1,0 @@
-def Rule():
-    return "Hello World"

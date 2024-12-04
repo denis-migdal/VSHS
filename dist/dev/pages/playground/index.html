@@ -18,22 +18,9 @@
             <header>
                 <select></select> - Server: <input/> (TODO)
             </header>
-            <div class="grid">
-            <vshs-playground
+            <vshs-playground show="index.code,output,request.code"
                              >
             </vshs-playground>
-            <div>
-                TODO: Example config form<br/>
-                - route (with example ?)
-                - URL (/xxx)
-                - body
-            </div>
-            <div>
-                TODO: queries from Example config<br/>
-                - JS/Bry query
-                - wget query
-                - curl query
-            </div>
         </main>
     </body>
 </html>

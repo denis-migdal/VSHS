@@ -1,0 +1,8 @@
+from browser import window;
+
+async def main():
+    r = await window.fetch("/Hello World");
+    window.document.body.textContent = await r.text();
+
+from browser import aio;
+aio.run(main())

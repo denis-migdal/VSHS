@@ -2,17 +2,21 @@ import LISS from "../../../../../libs/LISS/src/";
 import PlaygroundArea, { ASSETS } from "../../../../../libs/LISS/src/pages/docs/skeleton/code/playground-area/PlaygroundArea";
 
 const resources = [{
-        file : 'index.json',
-        lang : 'json',
-        title: 'Example Config'
-    },{
         file : 'index.js',
         lang : 'js',
-        title: 'Rule JS'
+        title: 'Request Handler (JS)'
     },{
         file : 'index.bry',
         lang : 'python',
-        title: 'Rule Bry'
+        title: 'Request Handler (Brython)'
+    },{
+        file : 'request.js',
+        lang : 'js',
+        title: 'Request (JS)'
+    },{
+        file : 'request.bry',
+        lang : 'python',
+        title: 'Request (Brython)'
     },
 ]
 
@@ -42,95 +46,45 @@ class VSHSPlayground extends LISS({extends: PlaygroundArea}) {
         super(resources);
     }
 
-    override async updateCodes() {
-
-        this._inUpdate = true;
-
-        const example = this.host.getAttribute('name')!;
-
-        let promises: Promise<unknown>[] = [];
-
-        let names = new Array<string>();
-
-
-        console.warn(`${ASSETS}/${example}/index.json`);
-        const config = await (await fetch(`${ASSETS}/${example}/index.json`)).text();
-        ;
-        const code_api = this.resources['index.json'].ctrler!.setCode(config);
-        names.push('index.json');
-
-        const method = JSON.parse(config).method;
-
-        for(let file in this.resources) {
-
-            if(file === "index.json")
-                continue;
-
-            if(file === "output")
-                continue;
-
-            const code_api = this.resources[file].ctrler!;
-
-            const ext = file.split('.')[1];
-
-            promises.push( (async() => {
-                const resp = await fetch(`${ASSETS}/${example}/${method}.${ext}`);
-                let text = "";
-                if( resp.status === 200 ) {
-                    text = await resp.text();
-                    if(text !== "") {
-                        names.push(file);
-                    }
-                }
-                code_api.setCode( text );
-            })() );
-        }
-
-        await Promise.all(promises);
-        this.updateResult();
-
-        this._inUpdate = false;
-
-        if( ! this.host.hasAttribute("show") ) {
-            names.push("output");
-            this.host.setAttribute('show', names.join(','));
-        }
-
-        this.host.dispatchEvent(new Event("change") );
+    override setGrid() {
+        this.host.style.setProperty('grid', '1fr 1fr / 1fr 1fr');
     }
 
     override async generateIFrameContent() {
 
         const codes = this.getAllCodes();
 
-        if( codes["index.js"] === "") {
+        if( this.host.hasAttribute("brython") ) {
 
             let code = codes["index.bry"];
 
             codes["index.js"] = `const $B = globalThis.__BRYTHON__;
-            
-const result = $B.runPythonSource(\`${code}\`);
+
+const result = $B.runPythonSource(\\\`${code}\\\`);
+
 const imported = [...Object.values(__BRYTHON__.imported)];
 const last = imported[imported.length-1];
 
-export default last.Rule;
+export default last.RequestHandler;
 `;
+
+            let request = codes["request.bry"];
+            codes["request.js"] = `const $B = globalThis.__BRYTHON__;
+            
+const result = $B.runPythonSource(\`${request}\`);`;
 
         }
 
-
         const blob = new Blob([codes["index.js"]], {type: "application/javascript"});
-        const rule = (await import( /* webpackIgnore: true */ URL.createObjectURL(blob) )).default;
-
-        console.warn(codes["index.json"]);
+        
+        //const rule = (await import( /* webpackIgnore: true */ URL.createObjectURL(blob) )).default;
+        /*
         const config = JSON.parse(codes["index.json"]);
 
         const server = config.server ?? "http://fake.server/";
 
         const reg = path2regex(config.route);
         const vars = match(reg, config.query.url);
-
-        console.log( config.query.url, config.route );
         
         let result = rule({
             body : config.query.body,
@@ -146,9 +100,41 @@ export default last.Rule;
 
             result = JSON.stringify(result, null, 4);
             result = new Blob([result], {type: "application/json"});
-        }
+        }*/
 
-        return result;
+        const js = "";
+
+        const result = `<!DOCTYPE html>
+        <head>
+            <style>
+                body {
+                    margin: 0;
+                    background-color: white;
+                }
+            </style>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.13.0/brython.min.js"></script>
+            <script type="module" defer>
+
+                const handler_code = \`${codes['index.js']}\`;
+                const blob = new Blob([handler_code], {type: "text/javascript"});
+                const url = URL.createObjectURL(blob);
+                const handler= (await import(url)).default;
+
+                const fetch = window.fetch = async function( url, args ) {
+                    // build Request.
+                    const request = new Request(url, args)
+
+                    return handler( request );
+                }
+                
+                ${codes["request.js"]}
+            </script>
+        </head>
+        <body></body>
+    </html>
+    `;
+    
+            return result;
     }
 }
 

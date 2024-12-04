@@ -1,0 +1,6 @@
+#  /Hello World/GET.bry
+
+from browser import window
+
+def RequestHandler(request):
+    return window.Response.new("Hello World (bry)")

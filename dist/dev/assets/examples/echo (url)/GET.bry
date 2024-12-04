@@ -1,2 +1,2 @@
-def Rule(query):
+def RequestHandler(query):
     return query.url

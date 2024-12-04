@@ -15,7 +15,7 @@ const examples = [
 const playground = document.querySelector<HTMLElement>('vshs-playground')!;
 function setExample(name: string) {
     selector.value = name;
-    playground.removeAttribute('show');
+    //playground.removeAttribute('show');
     playground.setAttribute('name', name);
 }
 
@@ -93,6 +93,5 @@ selector.addEventListener('change', () => {
 const searchParams = new URLSearchParams(location.search);
 const example = searchParams.get('example');
 if( example !== null) {
-    console.warn(example);
     setExample(example);
 }
