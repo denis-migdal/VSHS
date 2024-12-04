@@ -157,10 +157,15 @@ export default class PlaygroundArea extends LISS({
         /**/
     }
     attributeChangedCallback(name) {
-        if (name === "show")
+        if (name === "show") {
             this.updateLayout();
-        if (name === "name")
+            return;
+        }
+        if (name === "name") {
             this.updateCodes();
+            return;
+        }
+        this.updateResult();
     }
     static observedAttributes = ["show", "name"];
 }

@@ -16,7 +16,7 @@
     <body>
         <main>
             <header>
-                <select></select> - Server: <input/> (TODO)
+                <select></select> - <input type="checkbox"/> Server: <input value="http://localhost:8080" />
             </header>
             <vshs-playground show="index.code,output,request.code"
                              >

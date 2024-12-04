@@ -50,7 +50,6 @@ export default class CodeBlock extends LISS({
             setCursorPos(this.#output, beg + copied.length);
         });
         this.#output.addEventListener("input", () => {
-            console.warn("called");
             const code = this.#output.textContent;
             this.host.textContent = code;
             // reset history offset
@@ -67,6 +66,8 @@ export default class CodeBlock extends LISS({
         // Tabulation key
         // @ts-ignore
         this.#output.addEventListener("keydown", (ev) => {
+            if (this.isRO)
+                return;
             if (ev.ctrlKey === true) {
                 const key = ev.key.toLowerCase();
                 if (key === "z") {
@@ -114,13 +115,33 @@ export default class CodeBlock extends LISS({
     get lang() {
         return this.host.getAttribute('lang') ?? "plaintext";
     }
+    get isRO() {
+        return this.host.hasAttribute('ro');
+    }
+    set isRO(ro) {
+        this.host.toggleAttribute('ro', ro);
+    }
+    reset() {
+        if (this.#history.length === 1)
+            return;
+        this.#history.length = 1;
+        this.#history_offset = 0;
+        // duplicated code...
+        let { code, cursor } = this.#history[this.#history.length - 1 - this.#history_offset];
+        this.host.textContent = code;
+        this.update();
+        if (cursor === null)
+            cursor = code.length;
+        setCursorPos(this.#output, cursor);
+    }
     update(trigger_event = true) {
+        this.#output.toggleAttribute("contenteditable", !this.isRO);
         this.#output.innerHTML = hl(this.host.textContent, this.lang);
         if (trigger_event)
             this.host.dispatchEvent(new Event('change'));
     }
     // TODO listen content.
-    static observedAttributes = ["lang"];
+    static observedAttributes = ["lang", "ro"];
     attributeChangedCallback() {
         this.update(); //TODO: request update.
     }

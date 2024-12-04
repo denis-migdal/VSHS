@@ -19,58 +19,28 @@ function setExample(name: string) {
     playground.setAttribute('name', name);
 }
 
-// init checkboxes
+// init server
 
-const checks = [...document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+const server     = document.querySelector<HTMLInputElement>('input:not([type="checkbox"])')!;
+const use_server = document.querySelector<HTMLInputElement>('input[type="checkbox"]')!;
 
-playground.addEventListener('change', () => {
-    const codes = playground.getAttribute('show')!.split(',');
-    for(let check of checks)
-        check.checked = codes.includes(check.value);
-})
 
-for(let check of checks) {
+function updateServer() {
 
-    check.addEventListener('input', (ev) => {
+    const use = use_server.checked;
+    const value = server.value;
 
-        const target = ev.target! as HTMLInputElement;
-        const checked = target.checked;
-        const page    = target.value;
+    if( ! use || value === "") {
+        playground.toggleAttribute('server', false);
+        return;
+    }
 
-        const layouts = playground.getAttribute('show')!.split(',');
-
-        if( checked ) {
-
-            const isJS  = page.endsWith('.js');
-            const isBry = page.endsWith('.bry');
-
-            if( isJS || isBry ) {
-                
-                let  ext = isJS ? "js"  : "bry";
-                let rext = isJS ? "bry" : "js";
-                let rpage = page.slice(0, - ext.length - 1) + "." + rext;
-
-                const rcheck = checks.find( c => c.value === rpage)!;
-                rcheck.checked = false;
-                
-                const idx = layouts.indexOf(rpage);
-                if(idx !== -1)
-                    layouts.splice(idx, 1, page);
-            }
-
-            if( ! layouts.includes(page) )
-                layouts.push(page);
-        } else {
-
-            const idx = layouts.indexOf(page );
-            if(idx !== -1)
-                layouts.splice(idx, 1);
-        }
-
-        playground.setAttribute('show', layouts.join(','));
-    });
-
+    playground.setAttribute('server', server.value);
 }
+
+    server.addEventListener('change', updateServer);
+use_server.addEventListener('change', updateServer);
+updateServer();
 
 // init select
 

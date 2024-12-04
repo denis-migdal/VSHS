@@ -3,4 +3,4 @@
 from browser import window
 
 def RequestHandler(request):
-    return window.Response.new("Hello World (bry)")
+    return window.Response.new("Hello World ;)")

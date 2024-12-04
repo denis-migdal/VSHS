@@ -216,12 +216,11 @@ host = HTMLElement, files = null }) {
         const code = bry_wrapper + files["index.bry"];
         files['index.js'] =
             `const $B = globalThis.__BRYTHON__;
-const result = $B.runPythonSource(\`${code}\`);
 
-const imported = [...Object.values(__BRYTHON__.imported)];
-const last = imported[imported.length-1];
+$B.runPythonSource(\`${code}\`, "_");
 
-export default last.WebComponent;
+const module = $B.imported["_"];
+export default module.WebComponent;
 
 `;
     }

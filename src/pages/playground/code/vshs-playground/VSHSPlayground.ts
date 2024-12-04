@@ -46,6 +46,8 @@ class VSHSPlayground extends LISS({extends: PlaygroundArea}) {
         super(resources);
     }
 
+    static override observedAttributes = [...PlaygroundArea.observedAttributes, "server"];
+
     override setGrid() {
         this.host.style.setProperty('grid', '1fr 1fr / 1fr 1fr');
     }
@@ -54,18 +56,22 @@ class VSHSPlayground extends LISS({extends: PlaygroundArea}) {
 
         const codes = this.getAllCodes();
 
-        if( this.host.hasAttribute("brython") ) {
+        const use_brython = this.host.hasAttribute("brython");
+        if( use_brython ) {
 
             let code = codes["index.bry"];
 
             codes["index.js"] = `const $B = globalThis.__BRYTHON__;
 
-const result = $B.runPythonSource(\\\`${code}\\\`);
+const result = $B.runPythonSource(\\\`${code}\\\`, "_");
 
-const imported = [...Object.values(__BRYTHON__.imported)];
-const last = imported[imported.length-1];
+//const imported = [...Object.values(__BRYTHON__.imported)];
+//const last = imported[imported.length-1];
+//export default last.RequestHandler;
 
-export default last.RequestHandler;
+const module = __BRYTHON__.imported["_"];
+export default module.RequestHandler;
+
 `;
 
             let request = codes["request.bry"];
@@ -75,34 +81,39 @@ const result = $B.runPythonSource(\`${request}\`);`;
 
         }
 
-        const blob = new Blob([codes["index.js"]], {type: "application/javascript"});
-        
-        //const rule = (await import( /* webpackIgnore: true */ URL.createObjectURL(blob) )).default;
         /*
-        const config = JSON.parse(codes["index.json"]);
-
-        const server = config.server ?? "http://fake.server/";
-
         const reg = path2regex(config.route);
         const vars = match(reg, config.query.url);
+        */
+
+        let fetch_override = "";
         
-        let result = rule({
-            body : config.query.body,
-            url  : new URL( encodeURI(config.query.url), server),
-            route: config.route,
-            route_vars: vars
-        }); //TODO: args
+        const use_server = this.host.hasAttribute('server');
 
-        if( typeof result !== "string") {
+        const handler_code = this.resources['index.code'].ctrler!;
+        handler_code.isRO = use_server;
 
-            if( result !== undefined && "$strings" in result)
-                result = result.$strings;
+        if( use_server )
+            handler_code.reset();
 
-            result = JSON.stringify(result, null, 4);
-            result = new Blob([result], {type: "application/json"});
-        }*/
+        //TODO: if URL is a request...
+        if( use_server )
+            fetch_override = `
+            const _fetch = window.fetch;        
+            const fetch = window.fetch = function (url, args = {}) {
+                const headers = args.headers ?? {};
+                args.headers = {...headers, "use-brython": "${use_brython}"};
+                return _fetch("${this.host.getAttribute('server')}" + url, args );
+            }`;
+        else
+            fetch_override = `
+                const fetch = window.fetch = async function( url, args ) {
+                    //TODO: build Request.
+                    const request = new Request(url, args)
 
-        const js = "";
+                    return handler( request );
+                }`;
+
 
         const result = `<!DOCTYPE html>
         <head>
@@ -120,12 +131,7 @@ const result = $B.runPythonSource(\`${request}\`);`;
                 const url = URL.createObjectURL(blob);
                 const handler= (await import(url)).default;
 
-                const fetch = window.fetch = async function( url, args ) {
-                    // build Request.
-                    const request = new Request(url, args)
-
-                    return handler( request );
-                }
+                ${fetch_override}
                 
                 ${codes["request.js"]}
             </script>

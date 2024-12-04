@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "demo" : "deno run --watch --check --unstable-sloppy-imports --allow-all VSHS.ts ./src/assets/examples/",
+    "test" : "deno test --allow-net ./src/assets/examples/"
+  },
+  "imports": {
+    "VSHS": "../VSHS.ts"
+  }
+}
