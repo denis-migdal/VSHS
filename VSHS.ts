@@ -188,17 +188,16 @@ export class SSEResponse {
 	}
 }
 
-export type HandlerParams = {
-
+export type HandlerParams = [{
 	url : URL,
-	body: null|any,
-	route: {
+	body: null|any
+	},{
 		path: string,
 		vars: Record<string, string>
 	}
-};
+];
 
-type Handler = (request: HandlerParams) => Promise<any|SSEResponse>;
+type Handler = (...args: HandlerParams) => Promise<any|SSEResponse>;
 type Routes  = (readonly [string, Handler, boolean])[];
 
 let brython: any = null;
@@ -256,13 +255,10 @@ async function loadAllRoutesHandlers(routes: string): Promise<Routes> {
 
 				export default fct;
 				`;
-				//TODO load __BRYTHON__...
-
 			}
 
 			const url = URL.createObjectURL( new Blob([code], {type: "text/javascript"}));
 
-			//TODO Brython switch...
 			module = await import( url );
 		} catch(e) {
 			console.error(e);
@@ -464,7 +460,7 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 			}
 
 			const body = await parseBody(request);
-			let answer = await route.handler({url, body, route});
+			let answer = await route.handler({url, body}, route);
 
 			return await buildAnswer(200, answer);
 
@@ -483,7 +479,7 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 			let answer  = e.message;
 			if(route !== null) {
 				try{
-					answer = await route.handler({url, body: e.message, route});	
+					answer = await route.handler({url, body: e.message}, route);	
 				} catch(e) {
 					console.error(e); // errors handlers shoudn't raise errors...
 				}

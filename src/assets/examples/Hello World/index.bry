@@ -2,5 +2,5 @@
 
 from browser import window
 
-def RequestHandler(request):
+def RequestHandler(request, route):
     return window.Response.new("Hello World ;)")

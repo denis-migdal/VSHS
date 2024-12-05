@@ -1,4 +1,5 @@
-import {test} from "../../../../index.ts";
+// @ts-ignore
+import {test} from "VSHS";
 
 test('Hello World',
      'http://localhost:8080/Hello World',
