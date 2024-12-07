@@ -34,7 +34,7 @@ Un serveur VSHS peut être lancé en lignes de commandes via `./VSHS.ts $ROUTES`
 
 💡 L'option `--help` permet d'afficher l'usage de la commande.
 
-### Via Deno
+### Via Deno (TypeScript)
 
 `VSHS.ts` exporte par défaut une fonction `startHTTPServer(opts)` permettant de lancer un serveur. `startHTTPServer(opts)` accepte plusieurs options :
 - `routes` : le chemin du dossier contenant les *requests handlers*, ou un ensemble de routes.
@@ -63,26 +63,88 @@ Vous pouvez ensuite lancer votre serveur via la commande : `run --allow-all myse
 
 ### En ligne de commandes (CLI)
 
-curl/wget
+#### Requêtes HTTP avec curl/wget
 
-You can then send HTTP queries to the server with the command `curl`:
+Les commandes `curl` et `wget` permettent d'envoyer des requêtes HTTP à un serveur et d'afficher sa réponse. Leur usage est décrit par le tableau ci-dessous :
+<style>
+table, th, td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+}
 
+tbody th {
+    text-align: left;
+}
+
+th,td {
+  padding: 5px;
+}
+</style>
+<table>
+    <thead>
+        <tr><td></td><th>curl</th><th>wget</th></tr>
+    </thead>
+    <tbody>
+        <tr><th>Envoyer une requête</th><td>curl "$URL"</td><td>wget -qO- "$URL"</td></tr>
+        <tr><th>Méthode HTTP</th><td>-X GET</td><td>--method=GET</td></tr>
+        <tr><th>Données</th><td>-d 'Hello'</td><td>--body-data='Hello'</td></tr>
+        <tr><th>Ajouter en-tête</th><td>-H "Content-Type: ..."</td><td>
+--header="Content-Type: ..."</td></tr>
+        <tr><th>En-tête de la réponse</th><td>-i</td><td>
+-S</td></tr>
+        <tr><th>Afficher les en-têtes</th><td>-v</td><td>
+--debug</td></tr>
+    </tbody>
+</table>
+
+Par exemple :
 ```shell
-curl -X $HTTP_METHOD -d "$BODY" -w "\n\nStatus code:%{http_code}\n" "$URL"
+$ curl -X GET "http://localhost:8080/Hello%20World" -w "
+
+Content    : %{content_type}
+Status code: %{http_code}
+"
+Hello World ;)
+
+Content    : text/plain;charset=UTF-8
+Status code: 200
 ```
 ```shell
-curl -w "\n" -X GET http://localhost:8080/hello-world
-```
-```shell
-curl -w "\n" -X POST -d '{"body": "A"}' http://localhost:8080/params/C?url=B
-```
-```shell
-curl -d "..." -H "Content-Type: ..."
+$ curl -X POST -d '{"A": 42}' "http://localhost:8080/echo%20(body)" -w "\n"
+{"A": 42}
 ```
 
-telnet
+💡 L'option `-w` de `curl` permet de formatter la sortie, notamment en affichant :<br/>
+- `content_type`
+- `http_code`
 
-wscat
+#### WebSockets
+
+La commande `wscat -c $URL` permet de se connecter au serveur via un WebSocket, e.g. :
+```
+wscat -c "http://localhost:8080/response (WebSocket)"
+Connected (press CTRL+C to quit)
+> Hello
+< Hello
+```
+
+💡 `wscat` s'installe via la commande `npm install -g wscat` (requiert les droits administrateur).
+
+#### TCP
+
+Vous pouvez requêter le serveur directement en TCP via la commande `nc $HOST $PORT`.
+
+Cependant, il vous faudra écrire vous même les requêtes HTTP, e.g.
+```
+$ nc localhost 8080
+POST /echo%20(body) HTTP/1.1
+Content-Type: plain/text
+Content-Length: 5
+
+Hello
+```
+
+💡 L'option `-l` démarre un serveur TCP, permettant alors de recevoir des requêtes HTTP générées par e.g. `curl`.
 
 ### Via JavaScript/Brython
 

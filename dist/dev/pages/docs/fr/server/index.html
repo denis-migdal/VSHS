@@ -28,7 +28,7 @@
 <h3 id="en-ligne-de-commandes-cli">En ligne de commandes (CLI)</h3>
 <p>Un serveur VSHS peut être lancé en lignes de commandes via <code>./VSHS.ts $ROUTES</code>, avec <code>$ROUTES</code> le dossier contenant les <em>requests handlers</em>.</p>
 <p>💡 L&#39;option <code>--help</code> permet d&#39;afficher l&#39;usage de la commande.</p>
-<h3 id="via-deno">Via Deno</h3>
+<h3 id="via-deno-typescript">Via Deno (TypeScript)</h3>
 <p><code>VSHS.ts</code> exporte par défaut une fonction <code>startHTTPServer(opts)</code> permettant de lancer un serveur. <code>startHTTPServer(opts)</code> accepte plusieurs options :</p>
 <ul>
 <li><code>routes</code> : le chemin du dossier contenant les <em>requests handlers</em>, ou un ensemble de routes.</li>
@@ -51,18 +51,77 @@ startHTTPServer({
 <p>💡 Vous pouvez aussi <a href="https://docs.deno.com/runtime/fundamentals/configuration/">configurer Deno</a> via les fichiers ̀<code>deno.json</code> et <code>package.json</code></p>
 <h2 id="requêter-le-serveur">Requêter le serveur</h2>
 <h3 id="en-ligne-de-commandes-cli-1">En ligne de commandes (CLI)</h3>
-<p>curl/wget</p>
-<p>You can then send HTTP queries to the server with the command <code>curl</code>:</p>
-<pre><code class="language-shell">curl -X $HTTP_METHOD -d &quot;$BODY&quot; -w &quot;\n\nStatus code:%{http_code}\n&quot; &quot;$URL&quot;
+<h4 id="requêtes-http-avec-curlwget">Requêtes HTTP avec curl/wget</h4>
+<p>Les commandes <code>curl</code> et <code>wget</code> permettent d&#39;envoyer des requêtes HTTP à un serveur et d&#39;afficher sa réponse. Leur usage est décrit par le tableau ci-dessous :</p>
+<style>
+table, th, td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+}
+
+tbody th {
+    text-align: left;
+}
+
+th,td {
+  padding: 5px;
+}
+</style>
+<table>
+    <thead>
+        <tr><td></td><th>curl</th><th>wget</th></tr>
+    </thead>
+    <tbody>
+        <tr><th>Envoyer une requête</th><td>curl "$URL"</td><td>wget -qO- "$URL"</td></tr>
+        <tr><th>Méthode HTTP</th><td>-X GET</td><td>--method=GET</td></tr>
+        <tr><th>Données</th><td>-d 'Hello'</td><td>--body-data='Hello'</td></tr>
+        <tr><th>Ajouter en-tête</th><td>-H "Content-Type: ..."</td><td>
+--header="Content-Type: ..."</td></tr>
+        <tr><th>En-tête de la réponse</th><td>-i</td><td>
+-S</td></tr>
+        <tr><th>Afficher les en-têtes</th><td>-v</td><td>
+--debug</td></tr>
+    </tbody>
+</table>
+
+<p>Par exemple :</p>
+<pre><code class="language-shell">$ curl -X GET &quot;http://localhost:8080/Hello%20World&quot; -w &quot;
+
+Content    : %{content_type}
+Status code: %{http_code}
+&quot;
+Hello World ;)
+
+Content    : text/plain;charset=UTF-8
+Status code: 200
 </code></pre>
-<pre><code class="language-shell">curl -w &quot;\n&quot; -X GET http://localhost:8080/hello-world
+<pre><code class="language-shell">$ curl -X POST -d &#39;{&quot;A&quot;: 42}&#39; &quot;http://localhost:8080/echo%20(body)&quot; -w &quot;\n&quot;
+{&quot;A&quot;: 42}
 </code></pre>
-<pre><code class="language-shell">curl -w &quot;\n&quot; -X POST -d &#39;{&quot;body&quot;: &quot;A&quot;}&#39; http://localhost:8080/params/C?url=B
+<p>💡 L&#39;option <code>-w</code> de <code>curl</code> permet de formatter la sortie, notamment en affichant :<br/></p>
+<ul>
+<li><code>content_type</code></li>
+<li><code>http_code</code></li>
+</ul>
+<h4 id="websockets">WebSockets</h4>
+<p>La commande <code>wscat -c $URL</code> permet de se connecter au serveur via un WebSocket, e.g. :</p>
+<pre><code>wscat -c &quot;http://localhost:8080/response (WebSocket)&quot;
+Connected (press CTRL+C to quit)
+&gt; Hello
+&lt; Hello
 </code></pre>
-<pre><code class="language-shell">curl -d &quot;...&quot; -H &quot;Content-Type: ...&quot;
+<p>💡 <code>wscat</code> s&#39;installe via la commande <code>npm install -g wscat</code> (requiert les droits administrateur).</p>
+<h4 id="tcp">TCP</h4>
+<p>Vous pouvez requêter le serveur directement en TCP via la commande <code>nc $HOST $PORT</code>.</p>
+<p>Cependant, il vous faudra écrire vous même les requêtes HTTP, e.g.</p>
+<pre><code>$ nc localhost 8080
+POST /echo%20(body) HTTP/1.1
+Content-Type: plain/text
+Content-Length: 5
+
+Hello
 </code></pre>
-<p>telnet</p>
-<p>wscat</p>
+<p>💡 L&#39;option <code>-l</code> démarre un serveur TCP, permettant alors de recevoir des requêtes HTTP générées par e.g. <code>curl</code>.</p>
 <h3 id="via-javascriptbrython">Via JavaScript/Brython</h3>
 <ul>
 <li>fetch
