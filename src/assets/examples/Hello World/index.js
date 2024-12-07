@@ -1,5 +1,5 @@
 // /Hello World/GET.js
 
-export default function() {
+export default async function() {
     return new Response("Hello World ;)");
 }

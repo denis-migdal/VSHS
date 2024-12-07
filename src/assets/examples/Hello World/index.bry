@@ -1,6 +1,6 @@
 #  /Hello World/GET.bry
 
-from browser import window
+from browser import self
 
-def RequestHandler(request, route):
-    return window.Response.new("Hello World ;)")
+async def RequestHandler(request, _):
+    return self.Response.new("Hello World ;)")

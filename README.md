@@ -1,8 +1,10 @@
 <div align="center">
-  <h1>[PROJECT TITLE]</h1>
+  <h1>VSHS : Very Simple HTTP Server</h1>
 
-  <p>[Project description</p>
+  <p>Build very easily an HTTP server in TS, JS, or Brython.</p>
 </div>
+
+Documentation (fr) : https://denis-migdal.github.io/VSHS/dist/dev/pages/docs/fr/
 
 ## Build
 

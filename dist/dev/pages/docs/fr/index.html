@@ -15,7 +15,46 @@
     </head>
     <body>
         <main>
-            HERE
-        </main>
+
+<h1 id="documentation-vshs">Documentation VSHS</h1>
+<p>VSHS vous permet de créer très facilement votre propre serveur Web HTTP.</p>
+<p>Pour cela, il vous suffit de définir une fonction (<em>request handler</em>) qui répondra aux requêtes reçues par votre serveur, avec :</p>
+<ul>
+<li>en <strong>entrée</strong>, la <em>requête HTTP</em> (<a href="https://developer.mozilla.org/fr/docs/Web/API/Request"><code>Request</code></a>) reçue ;</li>
+<li>en <strong>sortie</strong>, la <em>réponse HTTP</em> (<a href="https://developer.mozilla.org/fr/docs/Web/API/Response"><code>Response</code></a>) à retourner.</li>
+</ul>
+<vshs-playground name="echo (url)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../playground/?example=echo (url)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+<p>💡 Vous pouvez changer le langage (JavaScript ou Brython) via l&#39;icône en haut à droite de la page.<br/>
+💡 [TODO] Learn more about playground.</p>
+<p>Les <em>requests handlers</em> sont définis dans un dossier <js-code class="d4rk"><var>$ROUTES</var></js-code> de votre choix. Les requêtes HTTP effectuées sur la route (≈ensemble d&#39;URL) <js-code class="d4rk"><var>$PATH</var></js-code> sont alors traitées par les <em>requests handlers</em> définis dans le sous-dossier <js-code class="d4rk"><var>$ROUTES</var>/<var>$PATH</var>/</js-code>.<br/>
+Par exemple, les requêtes HTTP effectuées sur l&#39;URL <js-code class="d4rk">/foo/faa</js-code> seront traitées par les <em>requests handlers</em> contenus dans le sous-dossier <js-code class="d4rk"><var>$ROUTES</var>/foo/faa/</js-code>.</p>
+<p>Dans ce sous-dossier, chaque fichier défini le <em>request handler</em> qui traitera la méthode HTTP de même nom.
+Par exemple, la requête HTTP <js-code>GET /foo/faa</js-code> sera traitée par le <em>request handler</em> contenu dans le fichier <js-code class="d4rk"><var>$ROUTES</var>/foo/faa/GET.ts</js-code> (ou <js-code>.js</js-code>/<js-code>.bry</js-code>).</p>
+<p>⚠ Pour que les <em>requests handlers</em> puissent être correctement chargés dans VSHS :</p>
+<ul>
+<li>Les fichiers JavaScript (.js) et TypeScript (.ts) doivent faire un export par défaut du <em>request handler</em> (<j-code>export default</js-code>).</li>
+<li>Les fichiers Brython doivent nommer le <em>request handler</em> <py-code>RequestHandler</py-code>.</li>
+</ul>
+<p>Vous pouvez en apprendre plus sur la manière d&#39;utiliser VSHS via les liens suivants :</p>
+<ul>
+<li>[TODO] Démarrer et requêter le serveur HTTP.<ul>
+<li>API/CMD line ?</li>
+</ul>
+</li>
+<li><a href="./response">Construire une réponse HTTP (à retourner)</a> ;</li>
+<li>[TODO] Lire une requête HTTP reçue.</li>
+<li>[TODO] Les routes/Définir des routes (?)<ul>
+<li>assets/static</li>
+<li>error code ?</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>remove dead code... (parse/generate/HTTP Error)</li>
+</ul>
+</main>
     </body>
 </html>

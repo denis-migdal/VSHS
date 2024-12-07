@@ -1,0 +1,11 @@
+from browser import self
+
+async def main():
+    r = await self.fetch("/echo (body)", {
+        "method": "POST",
+        "body"  : "Hello ;)"
+    });
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

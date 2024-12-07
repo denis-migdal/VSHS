@@ -1,8 +1,8 @@
-from browser import window;
+from browser import self
 
 async def main():
-    r = await window.fetch("/Hello World");
-    window.document.body.textContent = await r.text();
+    r = await self.fetch("/Hello World")
+    self.print_response(r)
 
-from browser import aio;
+from browser import aio
 aio.run(main())

@@ -1,7 +1,0 @@
-{
-    "method": "GET",
-    "route" : "/echo (url)",
-    "query" : {
-        "url"  : "/echo (url)"
-    }
-}

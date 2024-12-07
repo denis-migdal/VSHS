@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-all --watch --check --unstable-sloppy-imports
 
-if( Deno.args.length ) {
+if( "Deno" in globalThis && Deno.args.length ) {
 
 	const {parseArgs} = await import("jsr:@std/cli/parse-args");
 
@@ -17,7 +17,7 @@ if( Deno.args.length ) {
 	startHTTPServer({
 		port    : args.port ?? 8080,
 		hostname: args.host ?? "localhost",
-		routes  : args._[0]
+		routes  : args._[0] as string
 	})
 
 }
@@ -31,6 +31,7 @@ export async function test(
 	request    : Request|string,
 	expected_response: Partial<ExpectedAnswer>
 ) {
+
 	if(typeof request === "string")
 		request = new Request(encodeURI(request));
 
@@ -58,22 +59,31 @@ function uint_equals(a: Uint8Array, b: Uint8Array) {
 }
 
 type ExpectedAnswer = {
-	status: number,
+	status    : number,
+	statusText: string,
 	body  : string|Uint8Array|null,
-	mime  : string|null
+	mime  : string|null,
 };
 
 export async function assertResponse(response: Response, {
 	status = 200,
 	body   = null,
 	mime   = null,
+	statusText = "OK"
 
 }: Partial<ExpectedAnswer>) {
 
-	if(response.status !== status)
+	if(response.status !== status) {
 		throw new Error(`\x1b[1;31mWrong status code:\x1b[0m
 \x1b[1;31m- ${response.status}\x1b[0m
 \x1b[1;32m+ ${status}\x1b[0m`);
+	}
+
+	if(response.statusText !== statusText) {
+		throw new Error(`\x1b[1;31mWrong status text:\x1b[0m
+\x1b[1;31m- ${response.statusText}\x1b[0m
+\x1b[1;32m+ ${statusText}\x1b[0m`);
+	}
 
 	let rep_mime = response.headers.get('Content-Type');
 	if( mime === null && rep_mime === "application/octet-stream")
@@ -93,7 +103,7 @@ export async function assertResponse(response: Response, {
 	} else {
 
 		const rep_text = await response.text();
-		if( rep_text !== body)
+		if( rep_text !== body && (body !== null || rep_text !== "") )
 			throw new Error(`\x1b[1;31mWrong body:\x1b[0m
 \x1b[1;31m- ${rep_text}\x1b[0m
 \x1b[1;32m+ ${body}\x1b[0m`);
@@ -152,44 +162,8 @@ export class HTTPError extends Error {
 	}
 }
 
-
-export class SSEResponse {
-
-	#controller?: ReadableStreamDefaultController;
-
-	#stream = new ReadableStream({
-
-		start: (controller: any) => {
-			this.#controller = controller;
-		},
-		cancel: () => {
-			this.onConnectionClosed?.();
-		}
-	});
-
-	onConnectionClosed: null| (() => Promise<void>|void) = null;
-
-	constructor(run: (self: SSEResponse) => Promise<void>) {
-		run(this);
-	}
-
-	get _body() {
-		return this.#stream;
-	}
-
-	async send(data: any, event?: string) {
-
-		// JSON.stringify is required to escape characters.
-		let text = `data: ${JSON.stringify(data)}\n\n`;
-		if( event !== undefined)
-			text = `event: ${event}\n${text}`
-
-		this.#controller?.enqueue( new TextEncoder().encode( text ) );
-	}
-}
-
 export type HandlerParams = [{
-	url : URL,
+	url : URL|string,
 	body: null|any
 	},{
 		path: string,
@@ -197,31 +171,40 @@ export type HandlerParams = [{
 	}
 ];
 
-type Handler = (...args: HandlerParams) => Promise<any|SSEResponse>;
+type Handler = (...args: HandlerParams) => Promise<any>;
 type Routes  = (readonly [string, Handler, boolean])[];
 
-let brython: any = null;
+let brython_loading  = false;
+// @ts-ignore
+let brython_promise = Promise.withResolvers<void>();
 
 async function load_brython() {
-	if( brython !== null)
+	if( brython_loading ) {
+		await brython_promise.promise
 		return;
+	}
+
+	brython_loading = true;
 
 	//brython = await (await fetch( "https://cdnjs.cloudflare.com/ajax/libs/brython/3.13.0/brython.min.js" )).text();
+	const file = "brython(1)";
 	const dir = import.meta.url.slice(6, import.meta.url.lastIndexOf('/') );
-	brython = await Deno.readTextFile(dir + '/brython.js');
+	const brython = await Deno.readTextFile(dir + `/${file}.js`);
 
 	// @ts-ignore
-	window.__BRYTHON__ = {}; // why is it required ???
+	globalThis.$B  = globalThis.__BRYTHON__ = {}; // why is it required ???
+	// @ts-ignore
+	globalThis.inner = null;
 	eval(brython);
+
+	console.warn("== loaded ==");
+	brython_promise.resolve();
 }
 
 async function loadAllRoutesHandlers(routes: string): Promise<Routes> {
 
 	const ROOT = rootDir();
 	let routes_uri = await getAllRoutes(routes);
-
-	//TODO: other examples
-	routes_uri = routes_uri.filter(e => e.includes("Hello World") );
 
 	type Module = {default: Handler};
 	const handlers   = await Promise.all( routes_uri.map( async (uri) => {
@@ -235,11 +218,16 @@ async function loadAllRoutesHandlers(routes: string): Promise<Routes> {
 			uri = `file://${uri}`;*/
 
 		const is_brython = uri.endsWith('.bry');
+		let ext = is_brython ? ".bry" : ".ts"
+		let route = uri.slice(routes.length, - ext.length);
 
 		let module!: Module;
 		try{
 
 			let code = await Deno.readTextFile(uri);
+
+			if( route.endsWith('index') )
+				route = code.slice(3, code.indexOf('\n') - ext.length );
 
 			if( is_brython ) {
 
@@ -253,24 +241,35 @@ async function loadAllRoutesHandlers(routes: string): Promise<Routes> {
 				const module = $B.imported["_"];
 				const fct    = $B.pyobj2jsobj(module.RequestHandler);
 
-				export default fct;
+				const fct2 = async (...args) => {
+					try {
+						const r = await fct(...args);
+						if( r?.__class__?.__qualname__ === "NoneType")
+							return undefined;
+						return r;
+					} catch(e) {
+						if( ! ("$py_error" in e) )
+							throw e;
+						let js_error = e.args[0];
+
+						if( ! (js_error instanceof Response) )
+							js_error = new Error(js_error);
+						
+						throw js_error;
+					}
+				}
+
+				export default fct2;
 				`;
 			}
 
 			const url = URL.createObjectURL( new Blob([code], {type: "text/javascript"}));
 
 			module = await import( url );
+
 		} catch(e) {
 			console.error(e);
 		}
-
-		let ext = is_brython ? ".bry" : ".ts"
-		
-		let route = uri.slice(routes.length, - ext.length);
-
-		//TODO: get real method
-		if( route.endsWith('index') )
-			route = route.slice(0, -'index'.length) + 'GET';
 
 		const handler: Handler = module.default;
 
@@ -304,105 +303,41 @@ type REST_Methods = "POST"|"GET"|"DELETE"|"PUT"|"PATCH";
 
 const CORS_HEADERS = {
 	"Access-Control-Allow-Origin": "*",
-	"Access-Control-Allow-Methods": "POST, GET, PATCH, PUT, OPTIONS, DELETE",
-	"Access-Control-Allow-Headers": "use-brython"
+	"Access-Control-Allow-Methods": "*", // POST, GET, PATCH, PUT, OPTIONS, DELETE
+	"Access-Control-Allow-Headers": "*"  // "use-brython"
 };
 
-async function buildAnswer(http_code: number,
-						   response: string|SSEResponse|any,
-						   mime: string|null = null) {
+function buildAnswer(response: Response|null = null) {
 
-	const headers: HeadersInit = {...CORS_HEADERS};
+	if( response === null )
+		response = new Response(null);
 
-	if( response instanceof Response ) {
+	// Probably WebSocket upgrade
+	if( response.status === 101)
+		return response;
 
-		return new Response( response.body, {
-				status: http_code,
-				headers: {...headers, ...response.headers}
-			} );
+	if( ! (response instanceof Response) ) {
+		console.warn(response);
+		throw new Error("Request handler returned something else than a Response");
 	}
 
-	switch (true) {
-		case response === null || response === undefined:
-			response = null;
-			mime =  null;
-			break;
-		case response instanceof SSEResponse: 
-			response = response._body;
-			mime =  "text/event-stream";
-			break;
-		case typeof response === "string": 
-			mime ??= "text/plain";
-			break;
-		case response instanceof FormData:
-			response = new URLSearchParams(response as any)
-		case response instanceof URLSearchParams:
-			mime = "application/x-www-form-urlencoded"
-			response = response.toString();
-			break;
-		case response instanceof Uint8Array:
-			mime ??= "application/octet-stream";
-			break;
-		case response instanceof Blob:
-			mime ??= response.type ?? "application/octet-stream";
-			response = await response.arrayBuffer();
-			break;
-		default:
-			response = JSON.stringify(response, null, 4);
-			mime = "application/json";
-	}
+	const rep_headers = new Headers(response.headers);
 
-	if(mime !== null)
-		headers["content-type"] = mime;
+	for(let name in CORS_HEADERS)
+		// @ts-ignore
+		rep_headers.set(name, CORS_HEADERS[name])
 
-	return new Response( response, {status: http_code,
-									headers} );
+	const rep = new Response( response.body, {
+		status    : response.status,
+		statusText: response.statusText,
+		headers   : rep_headers
+	} );
+
+	return rep;
 }
 
-async function parseBody(request: Request) {
-
-	if( request.body === null)
-		return null;
-
-	let content_type = request.headers.get('Content-Type');
-	if( content_type === null || content_type === 'application/octet-stream') {
-
-		const buffer = await request.arrayBuffer();
-
-		if(buffer.byteLength === 0)
-			return null;
-
-		return new Uint8Array(buffer);
-	}
-
-	const [mime] = content_type.split(';')
-
-	if( ["text/plain", "application/json", "application/x-www-form-urlencoded"].includes(mime) ) {
-
-		const text = await request.text();
-		if( text === "")
-			return null;
-
-		try {
-			return JSON.parse(text);
-		} catch(e) {
-
-			if( mime === "application/json" )
-				throw e;
-			if( mime === "application/x-www-form-urlencoded")
-				return Object.fromEntries(new URLSearchParams(text).entries() );
-			return text;
-		}
-	}
-
-	const buffer = await request.arrayBuffer()
-	if(buffer.byteLength === 0)
-		return null;
-
-	return new Blob([buffer], {type: mime});
-}
-
-import { mimelite } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
+// use async ?
+//import { mimelite } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
 function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) {
 
 	const regexes = routes.map( ([uri, handler, is_bry]) => [path2regex(uri), handler, uri, is_bry] as const);
@@ -425,6 +360,9 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 				use_brython = request.headers.get("use-brython") === "true";
 
 			const route = getRouteHandler(regexes, method, url, use_brython);
+
+			console.warn(route);
+
 			if(route === null) {
 			
 				if( _static === undefined )
@@ -454,18 +392,26 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 				const parts = filepath.split('.');
 				const ext = parts[parts.length-1];
 
-				const mime = mimelite.getType(ext) ?? "text/plain";
+				const mime = null; //mimelite.getType(ext) ?? "text/plain";
 				
-				return await buildAnswer(200, content, mime);
+				throw new Error('not implemented');
+				//return await buildAnswer(200, content, mime);
 			}
 
-			const body = await parseBody(request);
-			let answer = await route.handler({url, body}, route);
+			let answer = await route.handler(request, route);
 
-			return await buildAnswer(200, answer);
+			return buildAnswer(answer);
 
 		} catch(e) {
 
+			console.warn(e);
+			if( e instanceof Response )
+				return buildAnswer(e);
+
+			return buildAnswer(new Response(e.message, {status: 500}) );
+
+			// TODO: remove
+			/*
 			error = e;
 
 			let error_code = 500;
@@ -486,6 +432,7 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 			}
 
 			return await buildAnswer(error_code, answer);
+			*/
 		} finally {
 			if( logger !== undefined )
 				logger(ip, method, url, error);
@@ -530,7 +477,8 @@ function getRouteHandler(regexes: (readonly [RegExp, Handler, string, boolean])[
 			return {
 				handler: route[1],
 				path   : route[2],
-				vars
+				vars,
+				url
 			};
 	}
 

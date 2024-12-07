@@ -1,0 +1,12 @@
+from browser import self
+
+w =  self.WebSocket.new("/response (WebSocket)")
+
+def onMessage(ev):
+    self.document.body.textContent = ev.data
+
+def onOpen(ev):
+    w.send("Hello")
+
+w.addEventListener("message", onMessage)
+w.addEventListener("open", onOpen)

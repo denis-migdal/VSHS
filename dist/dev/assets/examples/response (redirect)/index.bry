@@ -1,0 +1,7 @@
+#  /response (redirect)/GET.bry
+
+from browser import self
+
+async def RequestHandler(request, route):
+    target = route.url.origin + "/echo (url)";
+    return self.Response.redirect(target);

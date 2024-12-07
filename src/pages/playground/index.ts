@@ -7,8 +7,21 @@ const examples = [
     "Hello World",
     "echo (url)",
     "echo (body)",
-    "echo (route)/{A}",
-    "echo (route_vars)/{A}"
+    "response (json)",
+    "response (string)",
+    "response (URLSearchParams)",
+    "response (FormData)",
+    "response (Uint8Array)",
+    "response (Blob)",
+    "response (none)",
+    "response (clone)",
+    "response (redirect)",
+    "response (status)",
+    "response (throw response)",
+    "response (error)",
+    "response (stream)",
+    "response (SSE)",
+    "response (WebSocket)"
 ];
 
 // liss-playground

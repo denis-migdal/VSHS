@@ -6,6 +6,6 @@ test('Hello World',
      {
         status: 200,
         body  : "Hello World ;)",
-        //mime  : "text/plain"
+        mime  : "text/plain;charset=UTF-8"
      }
 );

@@ -1,0 +1,11 @@
+#  /response (status)/GET.bry
+
+from browser import self
+import javascript
+
+null = javascript.NULL
+
+async def RequestHandler(request, _):
+    return self.Response.new(null, {
+        "status"    : 501
+    });

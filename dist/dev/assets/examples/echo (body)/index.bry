@@ -1,0 +1,7 @@
+#  /echo (body)/POST.bry
+
+from browser import self
+
+async def RequestHandler(request, _):
+    received = await request.text()
+    return self.Response.new(received)

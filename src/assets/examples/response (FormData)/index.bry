@@ -1,0 +1,9 @@
+#  /response (FormData)/GET.bry
+
+from browser import self
+
+async def RequestHandler(request, _):
+    params = self.FormData.new();
+    params.set("a", 42);
+    params.set("b", 1337);
+    return self.Response.new(params);

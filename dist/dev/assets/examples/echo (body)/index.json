@@ -1,8 +1,0 @@
-{
-    "method": "POST",
-    "route" : "/echo (body)",
-    "query" : {
-        "url"  : "/echo (body)",
-        "body" : "coucou"
-    }
-}
