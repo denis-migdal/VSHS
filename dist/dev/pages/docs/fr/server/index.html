@@ -51,9 +51,18 @@ startHTTPServer({
 <p>💡 Vous pouvez aussi <a href="https://docs.deno.com/runtime/fundamentals/configuration/">configurer Deno</a> via les fichiers ̀<code>deno.json</code> et <code>package.json</code></p>
 <h2 id="requêter-le-serveur">Requêter le serveur</h2>
 <h3 id="en-ligne-de-commandes-cli-1">En ligne de commandes (CLI)</h3>
-<ul>
-<li>curl/wget/telnet/wscat</li>
-</ul>
+<p>curl/wget</p>
+<p>You can then send HTTP queries to the server with the command <code>curl</code>:</p>
+<pre><code class="language-shell">curl -X $HTTP_METHOD -d &quot;$BODY&quot; -w &quot;\n\nStatus code:%{http_code}\n&quot; &quot;$URL&quot;
+</code></pre>
+<pre><code class="language-shell">curl -w &quot;\n&quot; -X GET http://localhost:8080/hello-world
+</code></pre>
+<pre><code class="language-shell">curl -w &quot;\n&quot; -X POST -d &#39;{&quot;body&quot;: &quot;A&quot;}&#39; http://localhost:8080/params/C?url=B
+</code></pre>
+<pre><code class="language-shell">curl -d &quot;...&quot; -H &quot;Content-Type: ...&quot;
+</code></pre>
+<p>telnet</p>
+<p>wscat</p>
 <h3 id="via-javascriptbrython">Via JavaScript/Brython</h3>
 <ul>
 <li>fetch

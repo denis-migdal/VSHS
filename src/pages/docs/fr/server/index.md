@@ -63,7 +63,26 @@ Vous pouvez ensuite lancer votre serveur via la commande : `run --allow-all myse
 
 ### En ligne de commandes (CLI)
 
-- curl/wget/telnet/wscat
+curl/wget
+
+You can then send HTTP queries to the server with the command `curl`:
+
+```shell
+curl -X $HTTP_METHOD -d "$BODY" -w "\n\nStatus code:%{http_code}\n" "$URL"
+```
+```shell
+curl -w "\n" -X GET http://localhost:8080/hello-world
+```
+```shell
+curl -w "\n" -X POST -d '{"body": "A"}' http://localhost:8080/params/C?url=B
+```
+```shell
+curl -d "..." -H "Content-Type: ..."
+```
+
+telnet
+
+wscat
 
 ### Via JavaScript/Brython
 
