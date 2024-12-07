@@ -47,7 +47,7 @@ export default async function() {
     const stream = readable.pipeThrough(encoder);
     return new Response(stream, {
         headers: {
-            "content-type": "text/event-stream"
+            "Content-Type": "text/event-stream"
         }
     });
 }

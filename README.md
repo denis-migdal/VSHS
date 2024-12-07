@@ -77,15 +77,3 @@ startHTTPServer({
   static: '/assets'
 });
 ```
-
-```shell
-curl -w "\n\nType: %{content_type}\n" -X GET http://localhost:8080/
-```
-
-***Output:***
-
-```
-<b>Hello world</b>
-
-Type: text/html
-```

@@ -7,8 +7,7 @@ test('echo (body)',
      }),
      {
         status: 200,
-        body  : null,
-        mime  : "text/plain;charset=UTF-8"
+        body  : null
      }
 );
 

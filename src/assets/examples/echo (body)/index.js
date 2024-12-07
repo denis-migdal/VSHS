@@ -1,6 +1,7 @@
 // /echo (body)/POST.js
 
 export default async function(request) {
-    const received = await request.text();
-    return new Response(received);
+    return new Response(request.body, {
+        headers: request.headers
+    });
 }

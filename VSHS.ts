@@ -39,7 +39,6 @@ export async function test(
 		const lang = use_brython === "true" ? "bry" : "js";
 		Deno.test(`${test_name} (${lang})`, {sanitizeResources: false}, async() => {
 
-			// @ts-ignore
 			const r = request.clone();
 			r.headers.set("use-brython", use_brython);
 			await assertResponse(await fetch(r), expected_response);
@@ -88,13 +87,13 @@ export async function assertResponse(response: Response, {
 	let rep_mime = response.headers.get('Content-Type');
 	if( mime === null && rep_mime === "application/octet-stream")
 		rep_mime = null;
-	if( rep_mime !== mime )
+	if( rep_mime !== mime ) {
 		throw new Error(`\x1b[1;31mWrong mime-type:\x1b[0m
 \x1b[1;31m- ${rep_mime}\x1b[0m
 \x1b[1;32m+ ${mime}\x1b[0m`);
+		}
 
 	if( body instanceof Uint8Array ) {
-		// @ts-ignore
 		const rep = new Uint8Array(await response.bytes());
 		if( ! uint_equals(body, rep) )
 			throw new Error(`\x1b[1;31mWrong body:\x1b[0m
@@ -175,7 +174,6 @@ type Handler = (...args: HandlerParams) => Promise<any>;
 type Routes  = (readonly [string, Handler, boolean])[];
 
 let brython_loading  = false;
-// @ts-ignore
 let brython_promise = Promise.withResolvers<void>();
 
 async function load_brython() {
@@ -195,6 +193,10 @@ async function load_brython() {
 	globalThis.$B  = globalThis.__BRYTHON__ = {}; // why is it required ???
 	// @ts-ignore
 	globalThis.inner = null;
+	// @ts-ignore
+	globalThis.global = {};
+	// @ts-ignore
+	globalThis.module = {};
 	eval(brython);
 
 	console.warn("== loaded ==");
@@ -361,8 +363,6 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 
 			const route = getRouteHandler(regexes, method, url, use_brython);
 
-			console.warn(route);
-
 			if(route === null) {
 			
 				if( _static === undefined )
@@ -386,7 +386,7 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 					if( e instanceof Deno.errors.PermissionDenied )
 						throw new HTTPError(403, "Forbidden");
 					
-					throw new HTTPError(500, e.message);
+					throw new HTTPError(500, (e as any).message);
 				}
 
 				const parts = filepath.split('.');
@@ -404,11 +404,10 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 
 		} catch(e) {
 
-			console.warn(e);
 			if( e instanceof Response )
 				return buildAnswer(e);
 
-			return buildAnswer(new Response(e.message, {status: 500}) );
+			return buildAnswer(new Response( (e as any).message, {status: 500}) );
 
 			// TODO: remove
 			/*

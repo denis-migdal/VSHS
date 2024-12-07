@@ -19,7 +19,7 @@ data: {"i":2}
 
     return new Response(events, {
         headers: {
-            "content-type": "text/event-stream"
+            "Content-Type": "text/event-stream"
         }
     });
 }

@@ -51,6 +51,7 @@ Vous pouvez en apprendre plus sur la manière d'utiliser VSHS via les liens suiv
     + error code ?
 
 + remove dead code... (parse/generate/HTTP Error)
++ move test functions outside of VSHS.ts
 
 </main>
     </body>

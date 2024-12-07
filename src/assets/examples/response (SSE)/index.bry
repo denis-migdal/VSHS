@@ -42,6 +42,6 @@ async def RequestHandler(request, _):
     stream = t.readable.pipeThrough(encoder)
     return self.Response.new(stream,{
         "headers": {
-            "content-type": "text/event-stream"
+            "Content-Type": "text/event-stream"
         }
     });
