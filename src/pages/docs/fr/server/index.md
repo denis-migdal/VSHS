@@ -148,6 +148,8 @@ Hello
 
 ### Via JavaScript/Brython
 
+#### Fetch
+
 - fetch
     -> cache / redirect
     -> method
@@ -156,8 +158,38 @@ Hello
     -> await response
         -> status/statusText
         -> cf read request to read data
-- EventSource
-- WebSocket
+
+#### EventSource
+
+
+Les [Server-Sent Events](https://developer.mozilla.org/fr/docs/Web/API/Server-sent_events) permettent de recevoir progressivement des données du serveur.
+
+On peut alors utiliser `new EventSource(url)` afin de lire les événements envoyés par le serveur :
+
+<vshs-playground name="fetch (SSE)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (SSE)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+⚠ Actuellement, l'exemple ne peut être simulé dans le navigateur. Utilisez le bac à sable avec le serveur afin d'exécuter l'exemple.
+
+💡 Progressivement, `EventSource` a vocation à être remplacé par les flux fetch. Cependant, il s'agit d'une API bas niveau.
+
+#### WebSocket
+
+Les [`WebSocket`](https://developer.mozilla.org/fr/docs/Web/API/WebSocket) permettent des communications bidirectionnelles asynchrones entre le navigateur et le serveur :
+- `new WebSocket(url)` permet d'initialiser un nouveau WebSocket ;
+- `send(data)` permet d'envoyer des données ;
+- `addEventListener('message', ({data}) => {})` permet d'écouter les données reçues. 
+
+<vshs-playground name="response (WebSocket)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=response (WebSocket)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+⚠ Vous devez attendre que la connexion soit ouverte avant d'envoyer des données (i.e. attendre l'événement `open`).
+
+⚠ Actuellement, l'exemple ne peut être simulé dans le navigateur. Utilisez le bac à sable avec le serveur afin d'exécuter l'exemple.
+
+💡 Progressivement, les WebSockets ont vocation à être remplacés par l'API [`WebTransport`](https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API). Cependant, comme pour les flux, il s'agit d'une API bas niveau.
 
 </main>
     </body>

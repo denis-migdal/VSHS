@@ -89,7 +89,3 @@ curl -w "\n\nType: %{content_type}\n" -X GET http://localhost:8080/
 
 Type: text/html
 ```
-
-### Server-Sent Events
-
-If you want to return [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events), you just have to return an instance of `SSEResponse`:

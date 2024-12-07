@@ -1,0 +1,26 @@
+#  /fetch (SSE)/GET.bry
+
+from browser import self
+
+async def RequestHandler(request, _):
+    
+    events = """event: message
+event: message
+data: {"i":0}
+
+event: message
+data: {"i":1}
+
+event: message
+data: {"i":2}
+
+event: close
+data: {"i":2}
+
+""";
+
+    return self.Response.new(events, {
+        "headers": {
+            "content-type": "text/event-stream"
+        }
+    });

@@ -1,0 +1,12 @@
+from browser import self
+
+def onClose(event):
+    source.close()
+
+def onMessage(event):
+    self.document.body.append(event.data)
+
+source = self.EventSource.new("/fetch (SSE)")
+
+source.addEventListener('close', onClose)
+source.addEventListener('message', onMessage)

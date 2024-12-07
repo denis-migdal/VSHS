@@ -21,7 +21,8 @@ const examples = [
     "response (error)",
     "response (stream)",
     "response (SSE)",
-    "response (WebSocket)"
+    "response (WebSocket)",
+    "fetch (SSE)"
 ];
 
 // liss-playground

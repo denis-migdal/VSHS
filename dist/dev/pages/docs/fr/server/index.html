@@ -123,6 +123,7 @@ Hello
 </code></pre>
 <p>💡 L&#39;option <code>-l</code> démarre un serveur TCP, permettant alors de recevoir des requêtes HTTP générées par e.g. <code>curl</code>.</p>
 <h3 id="via-javascriptbrython">Via JavaScript/Brython</h3>
+<h4 id="fetch">Fetch</h4>
 <ul>
 <li>fetch
   -&gt; cache / redirect
@@ -132,9 +133,30 @@ Hello
   -&gt; await response
   -&gt; status/statusText
   -&gt; cf read request to read data</li>
-<li>EventSource</li>
-<li>WebSocket</li>
 </ul>
+<h4 id="eventsource">EventSource</h4>
+<p>Les <a href="https://developer.mozilla.org/fr/docs/Web/API/Server-sent_events">Server-Sent Events</a> permettent de recevoir progressivement des données du serveur.</p>
+<p>On peut alors utiliser <code>new EventSource(url)</code> afin de lire les événements envoyés par le serveur :</p>
+<vshs-playground name="fetch (SSE)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (SSE)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+<p>⚠ Actuellement, l&#39;exemple ne peut être simulé dans le navigateur. Utilisez le bac à sable avec le serveur afin d&#39;exécuter l&#39;exemple.</p>
+<p>💡 Progressivement, <code>EventSource</code> a vocation à être remplacé par les flux fetch. Cependant, il s&#39;agit d&#39;une API bas niveau.</p>
+<h4 id="websocket">WebSocket</h4>
+<p>Les <a href="https://developer.mozilla.org/fr/docs/Web/API/WebSocket"><code>WebSocket</code></a> permettent des communications bidirectionnelles asynchrones entre le navigateur et le serveur :</p>
+<ul>
+<li><code>new WebSocket(url)</code> permet d&#39;initialiser un nouveau WebSocket ;</li>
+<li><code>send(data)</code> permet d&#39;envoyer des données ;</li>
+<li><code>addEventListener(&#39;message&#39;, ({data}) =&gt; {})</code> permet d&#39;écouter les données reçues.</li>
+</ul>
+<vshs-playground name="response (WebSocket)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=response (WebSocket)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+<p>⚠ Vous devez attendre que la connexion soit ouverte avant d&#39;envoyer des données (i.e. attendre l&#39;événement <code>open</code>).</p>
+<p>⚠ Actuellement, l&#39;exemple ne peut être simulé dans le navigateur. Utilisez le bac à sable avec le serveur afin d&#39;exécuter l&#39;exemple.</p>
+<p>💡 Progressivement, les WebSockets ont vocation à être remplacés par l&#39;API <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API"><code>WebTransport</code></a>. Cependant, comme pour les flux, il s&#39;agit d&#39;une API bas niveau.</p>
 </main>
     </body>
 </html>
