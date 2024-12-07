@@ -43,8 +43,7 @@ Par exemple, la requête HTTP <js-code>GET /foo/faa</js-code> sera traitée par 
 - Les fichiers Brython doivent nommer le *request handler* <py-code>RequestHandler</py-code>.
 
 Vous pouvez en apprendre plus sur la manière d'utiliser VSHS via les liens suivants :
-- [TODO] Démarrer et requêter le serveur HTTP.
-    + API/CMD line ?
+- [Démarrer et requêter le serveur HTTP](./server) ;
 - [Construire une réponse HTTP (à retourner)](./response) ;
 - [TODO] Lire une requête HTTP reçue.
 - [TODO] Les routes/Définir des routes (?)

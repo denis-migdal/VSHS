@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>VSHS</title>
+        <!--
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="cyan" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+        -->
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="./index.css"  rel="stylesheet" blocking="render">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.13.0/brython.min.js"></script>
+        <script  src="./index.js"  type="module"     blocking="render" async></script>
+    </head>
+    <body>
+        <main>
+
+<h1 id="démarrer-et-requêter-le-serveur-http">Démarrer et requêter le serveur HTTP</h1>
+<p>L&#39;intégralité du serveur est contenu dans le fichier <code>./VSHS.ts</code>. Les autres fichiers contiennent les exemples, tests, et documentations.</p>
+<h2 id="démo-et-tests">Démo et tests</h2>
+<p>Vous pouvez lancer le serveur de démonstration via la commande <code>deno task demo</code>. Une fois le serveur lancé :</p>
+<ul>
+<li>lancez les tests unitaires via la commande <code>deno task test</code>.</li>
+<li>utilisez le serveur au sein du <a href="../../../playground/">bac à sable</a> en cochant l&#39;option &quot;Server&quot; présente en haut de la page.</li>
+</ul>
+<h2 id="démarrer-le-serveur">Démarrer le serveur</h2>
+<h3 id="en-ligne-de-commandes-cli">En ligne de commandes (CLI)</h3>
+<p>Un serveur VSHS peut être lancé en lignes de commandes via <code>./VSHS.ts $ROUTES</code>, avec <code>$ROUTES</code> le dossier contenant les <em>requests handlers</em>.</p>
+<p>💡 L&#39;option <code>--help</code> permet d&#39;afficher l&#39;usage de la commande.</p>
+<h3 id="via-deno">Via Deno</h3>
+<p><code>VSHS.ts</code> exporte par défaut une fonction <code>startHTTPServer(opts)</code> permettant de lancer un serveur. <code>startHTTPServer(opts)</code> accepte plusieurs options :</p>
+<ul>
+<li><code>routes</code> : le chemin du dossier contenant les <em>requests handlers</em>, ou un ensemble de routes.</li>
+<li><code>hostname</code>/<code>port</code> : l&#39;ip/port sur lequel le serveur HTTP va écouter.</li>
+</ul>
+<p>Par exemple :</p>
+<pre><code class="language-ts">// myserver.ts
+import startHTTPServer from &quot;VSHS&quot;;
+
+startHTTPServer({
+    routes: &quot;...&quot;
+});
+</code></pre>
+<p>Vous pouvez ensuite lancer votre serveur via la commande : <code>run --allow-all myserver.ts</code>.</p>
+<p>💡 Lors du développement vous pouvez utiliser les options suivantes :</p>
+<ul>
+<li><code>--check</code> : vérifier les types TypeScripts ;</li>
+<li><code>--watch=./</code> : relancer le serveur lorsque les fichiers du dossier <code>./</code> sont modifiés.</li>
+</ul>
+<p>💡 Vous pouvez aussi <a href="https://docs.deno.com/runtime/fundamentals/configuration/">configurer Deno</a> via les fichiers ̀<code>deno.json</code> et <code>package.json</code></p>
+<h2 id="requêter-le-serveur">Requêter le serveur</h2>
+<h3 id="en-ligne-de-commandes-cli-1">En ligne de commandes (CLI)</h3>
+<ul>
+<li>curl/wget/telnet/wscat</li>
+</ul>
+<h3 id="via-javascriptbrython">Via JavaScript/Brython</h3>
+<ul>
+<li>fetch
+  -&gt; cache / redirect
+  -&gt; method
+  -&gt; Request or url (+ body)
+  -&gt; cf build request for body data
+  -&gt; await response
+  -&gt; status/statusText
+  -&gt; cf read request to read data</li>
+<li>EventSource</li>
+<li>WebSocket</li>
+</ul>
+</main>
+    </body>
+</html>

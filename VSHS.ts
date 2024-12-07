@@ -8,9 +8,9 @@ if( "Deno" in globalThis && Deno.args.length ) {
 	// deno run --allow-all index.ts route
 
 	if( args.help ) {
-		console.log(`./VSHS.ts $ROUTE
-	--host : default locahost\n
-	--port : default 8080\n`)
+		console.log(`./VSHS.ts $ROUTES
+	--host : default locahost
+	--port : default 8080`)
 		Deno.exit(0);
 	}
 
