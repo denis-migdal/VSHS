@@ -135,6 +135,16 @@ Il est aussi possible de retourner des flux grâce à l'<a href="https://develop
     <div style="text-align:right"><a href="../../../playground/?example=response (SSE)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 </details>
 
+💡 VSHS fournit un *helper* permettant d'aisément retourner une réponse Server-Sent Event :
+<vshs-playground name="response (SSE Helper)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=response (SSE Helper)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+`SSEResponse` prend en paramètre :
+- un callback appelé avec `writer` et `..args` en paramètres ;
+- (facultatif) un `ResponseInit` permettant de configurer le `Response`;
+- (facultatif) une liste d'arguments `...args` transmis au callback.
+
 ## Websockets
 
 Les [`WebSocket`](https://developer.mozilla.org/fr/docs/Web/API/WebSocket) permettent des communications bidirectionnelles asynchrones entre le navigateur et le serveur :

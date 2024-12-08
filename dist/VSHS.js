@@ -4,9 +4,9 @@ if ("Deno" in globalThis && Deno.args.length) {
     const args = parseArgs(Deno.args);
     // deno run --allow-all index.ts route
     if (args.help) {
-        console.log(`./VSHS.ts $ROUTE
-	--host : default locahost\n
-	--port : default 8080\n`);
+        console.log(`./VSHS.ts $ROUTES
+	--host : default locahost
+	--port : default 8080`);
         Deno.exit(0);
     }
     startHTTPServer({
@@ -21,7 +21,6 @@ export async function test(test_name, request, expected_response) {
     for (let use_brython of ["true", "false"]) {
         const lang = use_brython === "true" ? "bry" : "js";
         Deno.test(`${test_name} (${lang})`, { sanitizeResources: false }, async () => {
-            // @ts-ignore
             const r = request.clone();
             r.headers.set("use-brython", use_brython);
             await assertResponse(await fetch(r), expected_response);
@@ -50,12 +49,12 @@ export async function assertResponse(response, { status = 200, body = null, mime
     let rep_mime = response.headers.get('Content-Type');
     if (mime === null && rep_mime === "application/octet-stream")
         rep_mime = null;
-    if (rep_mime !== mime)
+    if (rep_mime !== mime) {
         throw new Error(`\x1b[1;31mWrong mime-type:\x1b[0m
 \x1b[1;31m- ${rep_mime}\x1b[0m
 \x1b[1;32m+ ${mime}\x1b[0m`);
+    }
     if (body instanceof Uint8Array) {
-        // @ts-ignore
         const rep = new Uint8Array(await response.bytes());
         if (!uint_equals(body, rep))
             throw new Error(`\x1b[1;31mWrong body:\x1b[0m
@@ -86,7 +85,8 @@ export default async function startHTTPServer({ port = 8080, hostname = "localho
     // https://docs.deno.com/runtime/tutorials/http_server
     await Deno.serve({ port, hostname }, requestHandler).finished;
 }
-export class HTTPError extends Error {
+//TODO: remove
+class HTTPError extends Error {
     #error_code;
     constructor(http_error_code, message) {
         super(message);
@@ -97,8 +97,51 @@ export class HTTPError extends Error {
         return this.#error_code;
     }
 }
-let brython_loading = false;
+export class SSEWriter {
+    #writer;
+    constructor(writer) {
+        this.#writer = writer;
+    }
+    sendEvent(data, name = 'message') {
+        return this.#writer.write(`event: ${name}
+data: ${JSON.stringify(data)}
+
+`);
+    }
+    get closed() {
+        return this.#writer.closed;
+    }
+    close() {
+        return this.#writer.close();
+    }
+    abort() {
+        return this.#writer.abort();
+    }
+}
+// helper
+export const VSHS = {
+    SSEResponse: function (callback, options, ...args) {
+        const { readable, writable } = new TransformStream();
+        const writer = new SSEWriter(writable.getWriter());
+        callback(writer, ...args).catch((e) => {
+            writer.abort();
+            throw e;
+        });
+        const stream = readable.pipeThrough(new TextEncoderStream());
+        options ??= {};
+        options.headers ??= {};
+        if (options.headers instanceof Headers) {
+            if (!options.headers.has("Content-Type"))
+                options.headers.set("Content-Type", "text/event-stream");
+        }
+        else
+            options.headers["Content-Type"] ??= "text/event-stream";
+        return new Response(stream, options);
+    }
+};
 // @ts-ignore
+globalThis.VSHS = VSHS;
+let brython_loading = false;
 let brython_promise = Promise.withResolvers();
 async function load_brython() {
     if (brython_loading) {
@@ -114,6 +157,10 @@ async function load_brython() {
     globalThis.$B = globalThis.__BRYTHON__ = {}; // why is it required ???
     // @ts-ignore
     globalThis.inner = null;
+    // @ts-ignore
+    globalThis.global = {};
+    // @ts-ignore
+    globalThis.module = {};
     eval(brython);
     console.warn("== loaded ==");
     brython_promise.resolve();
@@ -233,7 +280,6 @@ function buildRequestHandler(routes, _static, logger) {
             if (request.headers.has("use-brython"))
                 use_brython = request.headers.get("use-brython") === "true";
             const route = getRouteHandler(regexes, method, url, use_brython);
-            console.warn(route);
             if (route === null) {
                 if (_static === undefined)
                     throw new HTTPError(404, "Not found");
@@ -262,7 +308,6 @@ function buildRequestHandler(routes, _static, logger) {
             return buildAnswer(answer);
         }
         catch (e) {
-            console.warn(e);
             if (e instanceof Response)
                 return buildAnswer(e);
             return buildAnswer(new Response(e.message, { status: 500 }));

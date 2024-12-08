@@ -21,6 +21,7 @@ const examples = [
     "response (error)",
     "response (stream)",
     "response (SSE)",
+    "response (SSE Helper)",
     "response (WebSocket)",
     "fetch (SSE)"
 ];

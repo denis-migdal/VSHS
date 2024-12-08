@@ -1,0 +1,8 @@
+from browser import self
+
+async def main():
+    r = await self.fetch("/response (SSE Helper)")
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

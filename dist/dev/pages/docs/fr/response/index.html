@@ -122,6 +122,17 @@
     <div style="text-align:right"><a href="../../../playground/?example=response (SSE)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 </details>
 
+<p>💡 VSHS fournit un <em>helper</em> permettant d&#39;aisément retourner une réponse Server-Sent Event :
+<vshs-playground name="response (SSE Helper)" show="index.code,output">
+</vshs-playground></p>
+<div style="text-align:right"><a href="../../../playground/?example=response (SSE Helper)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+<p><code>SSEResponse</code> prend en paramètre :</p>
+<ul>
+<li>un callback appelé avec <code>writer</code> et <code>..args</code> en paramètres ;</li>
+<li>(facultatif) un <code>ResponseInit</code> permettant de configurer le <code>Response</code>;</li>
+<li>(facultatif) une liste d&#39;arguments <code>...args</code> transmis au callback.</li>
+</ul>
 <h2 id="websockets">Websockets</h2>
 <p>Les <a href="https://developer.mozilla.org/fr/docs/Web/API/WebSocket"><code>WebSocket</code></a> permettent des communications bidirectionnelles asynchrones entre le navigateur et le serveur :</p>
 <ul>

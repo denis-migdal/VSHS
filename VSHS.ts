@@ -146,7 +146,9 @@ export default async function startHTTPServer({ port = 8080,
 	await Deno.serve({ port, hostname }, requestHandler).finished;
 }
 
-export class HTTPError extends Error {
+
+//TODO: remove
+class HTTPError extends Error {
 
 	#error_code:number;
 
@@ -160,6 +162,64 @@ export class HTTPError extends Error {
 		return this.#error_code;
 	}
 }
+
+export class SSEWriter {
+    #writer: WritableStreamDefaultWriter;
+    constructor(writer: WritableStreamDefaultWriter) {
+        this.#writer = writer;
+    }
+
+    sendEvent(data: any, name = 'message') {
+        return this.#writer.write(
+`event: ${name}
+data: ${JSON.stringify(data)}
+
+`);
+    }
+
+	get closed() {
+		return this.#writer.closed;
+	}
+
+	close() {
+		return this.#writer.close();
+	}
+
+	abort() {
+		return this.#writer.abort();
+	}
+}
+
+// helper
+export const VSHS = {
+	SSEResponse: function<T extends any[]>(callback: (writer: SSEWriter, ...args: T) => Promise<void>,
+										   options: ResponseInit,
+										   ...args: T) {
+		const {readable, writable} = new TransformStream();
+
+		const writer = new SSEWriter(writable.getWriter());
+		callback( writer, ...args ).catch( (e) => {
+			writer.abort();
+			throw e;
+		})
+	
+		const stream = readable.pipeThrough( new TextEncoderStream() );
+
+		options??= {};
+		options.headers??={};
+		if( options.headers instanceof Headers) {
+			if( ! options.headers.has("Content-Type") )
+				options.headers.set("Content-Type", "text/event-stream");
+		} else
+			(options.headers as Record<string, string>)["Content-Type"] ??= "text/event-stream";
+
+
+		return new Response(stream, options);
+
+	}
+};
+// @ts-ignore
+globalThis.VSHS = VSHS;
 
 export type HandlerParams = [{
 	url : URL|string,
