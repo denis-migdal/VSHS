@@ -127,7 +127,7 @@ type HTTPServerOpts = {
 	not_found      : string,
 	internal_error : string,
 
-	static?: string,
+	static?: string|undefined,
 	logger?: Logger // not documented
 };
 
@@ -169,23 +169,6 @@ export default async function startHTTPServer({ port = 8080,
 		port,
 		hostname,
 	 }, requestHandler).finished;
-}
-
-
-//TODO: remove
-class HTTPError extends Error {
-
-	#error_code:number;
-
-	constructor(http_error_code: number, message: string) {
-		super(message);
-		this.name = "HTTPError";
-		this.#error_code = http_error_code;
-	}
-
-	get error_code() {
-		return this.#error_code;
-	}
 }
 
 export class SSEWriter {
@@ -387,7 +370,7 @@ async function getAllRoutes(currentPath: string): Promise<string[]> {
 type REST_Methods = "POST"|"GET"|"DELETE"|"PUT"|"PATCH";
 
 const CORS_HEADERS = {
-	"Access-Control-Allow-Origin": "*",
+	"Access-Control-Allow-Origin" : "*",
 	"Access-Control-Allow-Methods": "*", // POST, GET, PATCH, PUT, OPTIONS, DELETE
 	"Access-Control-Allow-Headers": "*"  // "use-brython"
 };
@@ -422,7 +405,7 @@ function buildAnswer(response: Response|null = null) {
 }
 
 type buildRequestHandlerOpts = {
-	_static?: string,
+	_static?: string|undefined,
 	logger?: Logger,
 	not_found     : string,
 	internal_error: string
@@ -434,8 +417,6 @@ type DefaultRouteOpts = {
 } & Route;
 
 async function default_handler(request: Request, opts: DefaultRouteOpts) {
-
-	console.warn("called", opts, opts.error);
 
 	if( "error" in opts )
 		return new Response(opts.error!.message, {status: 500});

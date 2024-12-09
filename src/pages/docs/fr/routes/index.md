@@ -39,11 +39,15 @@ Le second paramètre des requests handlers contient, entres autres :
 
 ## Route par défaut
 
--> default behavior
+En cas d'erreur non-traitée, ou de route non-trouvée, la requête sera redirigée vers la **route par défaut** `/default/GET`.
 
-💡 Vous pouvez redéfinir ce comportement via un *request handler* défini par `$ROUTES/default/GET.ts`.
+💡 Vous pouvez ainsi définir un *request handler* par défaut via le fichier `$ROUTES/default/GET.*`.
 
-💡 Vous pouvez redéfinir la route par défaut via les options :
+En cas d'erreurs, ce *request handler* sera appelé avec des propriétés additionnelles pour son second argument :
+- `.error` : l'erreur reçue.
+- `.route` : le second argument du premier *request handler* appelé.
+
+💡 Vous pouvez redéfinir la route par défaut via les options suivantes :
 
 <style>
 table, th, td {
@@ -70,7 +74,7 @@ th,td {
     </tbody>
 </table>
 
-## Fichiers statics/assets
+## [TODO] Assets
 
 System (helper ?)
 

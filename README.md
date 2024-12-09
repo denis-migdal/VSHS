@@ -13,20 +13,6 @@ Documentation (fr) : https://denis-migdal.github.io/VSHS/dist/dev/pages/docs/fr/
 
 # OLD
 
-### Routes variables
-
-The `route` parameter has two components:
-
-- `path` is the route path, e.g. `/params/{name}/GET.ts`. Letters in between braces represents a variable, corresponding to set of letters (except `/`). Hence a single route path can match several URL, e.g.:
-  
-  - `/params/faa`
-  - `/params/fuu`
-
-- `vars` is an object whose keys are the path variables names and whose values their values in the current URL, e.g.:
-  
-  - `{name: "faa"}`
-  - `{name: "fuu"}`
-
 ### Mime-type
 
 | Return            | Mime                                              |

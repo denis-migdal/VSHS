@@ -37,9 +37,14 @@ Il suffit ainsi de créer un fichier <js-code>/produits/{ID}/GET.ts</js-code> po
 <div style="text-align:right"><a href="../../../playground/?example=echo (vars)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 <h2 id="route-par-défaut">Route par défaut</h2>
-<p>-&gt; default behavior</p>
-<p>💡 Vous pouvez redéfinir ce comportement via un <em>request handler</em> défini par <code>$ROUTES/default/GET.ts</code>.</p>
-<p>💡 Vous pouvez redéfinir la route par défaut via les options :</p>
+<p>En cas d&#39;erreur non-traitée, ou de route non-trouvée, la requête sera redirigée vers la <strong>route par défaut</strong> <code>/default/GET</code>.</p>
+<p>💡 Vous pouvez ainsi définir un <em>request handler</em> par défaut via le fichier <code>$ROUTES/default/GET.*</code>.</p>
+<p>En cas d&#39;erreurs, ce <em>request handler</em> sera appelé avec des propriétés additionnelles pour son second argument :</p>
+<ul>
+<li><code>.error</code> : l&#39;erreur reçue.</li>
+<li><code>.route</code> : le second argument du premier <em>request handler</em> appelé.</li>
+</ul>
+<p>💡 Vous pouvez redéfinir la route par défaut via les options suivantes :</p>
 <style>
 table, th, td {
   border: 1px solid grey;
@@ -65,7 +70,7 @@ th,td {
     </tbody>
 </table>
 
-<h2 id="fichiers-staticsassets">Fichiers statics/assets</h2>
+<h2 id="todo-assets">[TODO] Assets</h2>
 <p>System (helper ?)</p>
 <p>--assets
 --assets-prefix
