@@ -46,9 +46,7 @@ Vous pouvez en apprendre plus sur la manière d'utiliser VSHS via les liens suiv
 - [Démarrer et requêter le serveur HTTP](./server) ;
 - [Construire une réponse HTTP (à retourner)](./response) ;
 - [TODO] Lire une requête HTTP reçue.
-- [TODO] Les routes/Définir des routes (?)
-    + assets/static
-    + error code ?
+- [Définir une route](./routes)
 
 + remove dead code... (parse/generate/HTTP Error)
 + move test functions outside of VSHS.ts

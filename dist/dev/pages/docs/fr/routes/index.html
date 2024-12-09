@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>VSHS</title>
+        <!--
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="cyan" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+        -->
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="./index.css"  rel="stylesheet" blocking="render">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.13.0/brython.min.js"></script>
+        <script  src="./index.js"  type="module"     blocking="render" async></script>
+    </head>
+    <body>
+        <main>
+
+<h1 id="définir-une-route">Définir une route</h1>
+<h2 id="paramètres-de-routes">Paramètres de routes</h2>
+<p>Il est fréquent de traiter un ensemble d&#39;URL suivant le même format (e.g. <js-code>/produits/<var>$ID</var></js-code> ) par le même <em>request handler</em> :</p>
+<ul>
+<li><code>/produits/1</code> ;</li>
+<li><code>/produits/2</code> ;</li>
+<li><code>/produits/3</code> ;</li>
+<li>etc.</li>
+</ul>
+<p><js-code><var>$ID</var></js-code> est alors un <strong>paramètre de route</strong> et sera indiqué par son nom entre accolades, i.e. <js-code><var>{ID}</var></js-code>.<br/>
+Il suffit ainsi de créer un fichier <js-code>/produits/{ID}/GET.ts</js-code> pour définir un <em>request handler</em> associé à cet ensemble d&#39;URL.</p>
+<p>Le second paramètre des requests handlers contient, entres autres :</p>
+<ul>
+<li><code>path</code> : la route traitée ;</li>
+<li><code>vars</code> : les paramètres de routes.</li>
+</ul>
+<vshs-playground name="echo (vars)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (vars)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+
+<h2 id="routes-par-défaut">Routes par défaut</h2>
+<h3 id="code-derreurs">Code d&#39;erreurs</h3>
+<h3 id="fichiers-staticsassets">Fichiers statics/assets</h3>
+</main>
+    </body>
+</html>

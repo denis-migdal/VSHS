@@ -283,6 +283,7 @@ function buildRequestHandler(routes, _static, logger) {
             if (request.headers.has("use-brython"))
                 use_brython = request.headers.get("use-brython") === "true";
             const route = getRouteHandler(regexes, method, url, use_brython);
+            console.warn(route);
             if (route === null) {
                 if (_static === undefined)
                     throw new HTTPError(404, "Not found");

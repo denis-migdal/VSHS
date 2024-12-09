@@ -20,27 +20,6 @@ const resources = [{
     },
 ]
 
-//TODO: move...
-export function path2regex(path: string) {
-
-	// Escape special characters.
-	// cf https://stackoverflow.com/questions/3115150/how-to-escape-regular-expression-special-characters-using-javascript
-	path = path.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-
-	return new RegExp("^" + path.replace(/\\\{[^\}]+\\\}/g, (captured) => `(?<${captured.slice(2,-2)}>[^/]+)`) + "$");
-}
-
-export function match(regex: RegExp, uri: string) {
-
-	let result = regex.exec(uri);
-
-	if(result === null)
-		return false;
-
-	return result.groups ?? {};
-}
-
-
 class VSHSPlayground extends LISS({extends: PlaygroundArea}) {
 
     constructor() {
@@ -105,10 +84,13 @@ const result = $B.runPythonSource(\`${request}\`);`;
             js_code = js_code.replaceAll('`', '\\\`').replaceAll('$', '\\\$');
         }
 
-        /*
-        const reg = path2regex(config.route);
-        const vars = match(reg, config.query.url);
-        */
+        let ext = ".js";
+        let code = codes['index.js'];
+        if( use_brython ) {
+            ext = ".bry"
+            code = codes['index.bry'];
+        }
+        const route = code.slice(3, code.indexOf('\n') - ext.length );
 
         let fetch_override = "";
         
@@ -152,14 +134,24 @@ const WebSocket = window.WebSocket = NWebSocket;
             }`;
         else
             fetch_override = `
-                const fetch = window.fetch = async function( url, args ) {
+                const fetch = window.fetch = async function( target, args ) {
                     
-                    const request = url instanceof Request ? url
-                                                           : new Request(url, args);
+                    const request = target instanceof Request ? target
+                                                              : new Request(target, args);
 
-                    //TODO: path + vars
+                    const path = "${route}";
+                    const reg  = path2regex(path);
+
+                    const url = new URL(request.url);
+                    const uri = \`\${ decodeURI(url.pathname) }/\${request.method}\`
+                    const vars = match(reg, uri);
+
+                    console.warn(path, uri);
+
                     const route = {
-                        url: new URL(request.url)
+                        url,
+                        vars,
+                        path
                     };
 
                     let response;
@@ -197,7 +189,7 @@ const WebSocket = window.WebSocket = NWebSocket;
             <script type="text/javascript" src="${brython_script}"></script>
             <script type="module" defer>
 
-                import "${rootdir}/dist/dev/index.js";
+                import {match, path2regex} from "${rootdir}/dist/dev/index.js";
 
                 const handler_code = \`${js_code}\`;
                 const blob = new Blob([handler_code], {type: "text/javascript"});

@@ -1,1 +1,1 @@
-import "../VSHS";
+export {path2regex, match} from "../VSHS";

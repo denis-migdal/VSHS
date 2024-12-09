@@ -7,6 +7,7 @@ const examples = [
     "Hello World",
     "echo (url)",
     "echo (body)",
+    "echo (vars)",
     "response (json)",
     "response (string)",
     "response (URLSearchParams)",

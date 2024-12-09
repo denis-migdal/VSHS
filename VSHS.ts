@@ -427,6 +427,8 @@ function buildRequestHandler(routes: Routes, _static?: string, logger?: Logger) 
 
 			const route = getRouteHandler(regexes, method, url, use_brython);
 
+			console.warn(route);
+
 			if(route === null) {
 			
 				if( _static === undefined )
