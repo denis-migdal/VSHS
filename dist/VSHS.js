@@ -102,18 +102,6 @@ export default async function startHTTPServer({ port = 8080, hostname = "localho
         hostname,
     }, requestHandler).finished;
 }
-//TODO: remove
-class HTTPError extends Error {
-    #error_code;
-    constructor(http_error_code, message) {
-        super(message);
-        this.name = "HTTPError";
-        this.#error_code = http_error_code;
-    }
-    get error_code() {
-        return this.#error_code;
-    }
-}
 export class SSEWriter {
     #writer;
     constructor(writer) {
@@ -282,7 +270,6 @@ function buildAnswer(response = null) {
     return rep;
 }
 async function default_handler(request, opts) {
-    console.warn("called", opts, opts.error);
     if ("error" in opts)
         return new Response(opts.error.message, { status: 500 });
     //TODO assets
@@ -367,7 +354,7 @@ function buildRequestHandler(routes, { _static, logger, not_found = "/default/GE
             if (!(e instanceof Response)) {
                 const _route = internal_error_route[+use_brython];
                 _route.route = route;
-                _route.error = e;
+                error = _route.error = e;
                 e = await _route.handler(request, _route);
             }
             return buildAnswer(e);

@@ -34,7 +34,7 @@ Erreur non-capturée	--internal-error*/
 
 /*******************************/
 
-type Logger = (ip: string, method: string, url: URL, error: null|HTTPError|Error) => void;
+type Logger = (ip: string, method: string, url: URL, error: null|Error) => void;
 
 export async function test(
 	test_name  : string,
@@ -525,7 +525,7 @@ function buildRequestHandler(routes: Routes, {
 			if( ! (e instanceof Response) ) {
 				const _route = internal_error_route[+use_brython!];
 				_route.route = route;
-				_route.error = e as Error;
+				error = _route.error = e as Error;
 				e = await _route.handler(request, _route);
 			}
 

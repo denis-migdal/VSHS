@@ -4,7 +4,7 @@ async function callback(writer) {
 
     try {
         writer.closed.finally( () => {
-            console.warn("connexion closed");
+            // connexion closed
         });
 
         for(let i = 0; i < 3; ++i)

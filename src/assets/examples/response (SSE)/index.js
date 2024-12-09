@@ -19,17 +19,14 @@ async function callback(writer) {
 
     try {
         writer.closed.finally( () => {
-            console.warn("connexion closed");
+            // connexion closed
         });
 
         const sse = new SSEWriter(writer);
 
-        console.warn("SSE");
-
         for(let i = 0; i < 3; ++i)
             await sse.sendEvent({i});
 
-        console.warn("close");
         writer.close();
     } catch(e) {
         console.warn(`Error: ${e}`);

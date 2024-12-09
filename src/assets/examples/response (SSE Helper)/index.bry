@@ -5,7 +5,7 @@ from browser import self
 async def callback(writer, *args):
 
     def onClose():
-        print("connexion closed")
+        pass # connexion closed
     writer.closed["finally"](onClose)
 
     for i in range(0,3):

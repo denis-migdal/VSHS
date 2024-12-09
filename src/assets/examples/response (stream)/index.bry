@@ -7,7 +7,7 @@ async def callback(writer):
 
     try:
         def onClose():
-            print("connexion closed")
+            pass # connexion closed
 
         writer.closed["finally"](onClose)
 
