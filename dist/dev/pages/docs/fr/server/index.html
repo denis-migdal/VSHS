@@ -123,16 +123,42 @@ Hello
 </code></pre>
 <p>💡 L&#39;option <code>-l</code> démarre un serveur TCP, permettant alors de recevoir des requêtes HTTP générées par e.g. <code>curl</code>.</p>
 <h3 id="via-javascriptbrython">Via JavaScript/Brython</h3>
-<h4 id="fetch">Fetch</h4>
+<h4 id="envoyer-une-requête-avec-fetch">Envoyer une requête avec fetch</h4>
+<p>La fonction asynchrone <js-code>fetch(<var>$URL</var>[, <var>$RequestInit</var>])</js-code> envoie une requête HTTP et retourne un <code>Response</code>.</p>
+<p><code>RequestInit</code> peut contenir les champs suivants :</p>
 <ul>
-<li>fetch
-  -&gt; cache / redirect
-  -&gt; method
-  -&gt; Request or url (+ body)
-  -&gt; cf build request for body data
-  -&gt; await response
-  -&gt; status/statusText
-  -&gt; cf read request to read data</li>
+<li><code>method</code> : la méthode HTTP à utiliser (e.g. <code>GET</code>) ;</li>
+<li><code>body</code> : le corps de la requête HTTP ;</li>
+<li><code>headers</code> : des en-têtes HTTP à ajouter à la requête ;</li>
+<li><code>cache</code> : la politique de cache à utiliser ;</li>
+</ul>
+<p>💡 Vous pouvez aussi construire un <code>Request</code> et le donner en paramètre de <code>fetch()</code>:</p>
+<pre><code class="language-js">const request = new Request(&quot;/foo&quot;, {
+    method: &quot;POST&quot;,
+    body  : &quot;faa&quot;
+});
+
+fetch(request);
+</code></pre>
+<p>💡 La construction d&#39;un <code>Request</code> est similaire par bien des aspects à la construction d&#39;un <code>Response</code>.</p>
+<p>⚠ Contrairement à <code>Response</code>, <code>Request</code> ne dispose pas pour le moment d&#39;une méthode statique <code>.json()</code> (cf <a href="https://github.com/whatwg/fetch/issues/1791">issue</a>).<br/>
+Il convient ainsi d&#39;utiliser :</p>
+<pre><code class="language-js">fetch(url, {
+    body: JSON.stringify({}),
+    headers: {
+        &quot;Content-Type&quot;: &quot;application/json&quot;
+    }
+});
+</code></pre>
+<h4 id="lire-une-réponse">Lire une réponse</h4>
+<p><code>await fetch()</code> retourne un <code>Response</code> représentant la réponse du serveur.</p>
+<p>💡 La lecture d&#39;un <code>Response</code> est similaire par bien des aspects à la lecture d&#39;un <code>Request</code>.</p>
+<p><code>Response</code> a les propriétés suivantes :</p>
+<ul>
+<li><code>.ok</code> : indique si la réponse représente un succès ;</li>
+<li><code>.status</code> : le code de status HTTP ;</li>
+<li><code>.statusText</code> : un message décrivant le code de status HTTP ;</li>
+<li><code>.headers</code> : les en-têtes de la réponse HTTP ;</li>
 </ul>
 <h4 id="eventsource">EventSource</h4>
 <p>Les <a href="https://developer.mozilla.org/fr/docs/Web/API/Server-sent_events">Server-Sent Events</a> permettent de recevoir progressivement des données du serveur.</p>

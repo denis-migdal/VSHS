@@ -1,5 +1,6 @@
 #!/usr/bin/env -S deno run --allow-all --watch --check --unstable-sloppy-imports
 
+
 if( "Deno" in globalThis && Deno.args.length ) {
 
 	const {parseArgs} = await import("jsr:@std/cli/parse-args");
@@ -143,7 +144,10 @@ export default async function startHTTPServer({ port = 8080,
 	const requestHandler = buildRequestHandler(routesHandlers, _static, logger);
 
 	// https://docs.deno.com/runtime/tutorials/http_server
-	await Deno.serve({ port, hostname }, requestHandler).finished;
+	await Deno.serve({
+		port,
+		hostname,
+	 }, requestHandler).finished;
 }
 
 

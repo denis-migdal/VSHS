@@ -83,7 +83,10 @@ export default async function startHTTPServer({ port = 8080, hostname = "localho
         _static = rootDir() + _static;
     const requestHandler = buildRequestHandler(routesHandlers, _static, logger);
     // https://docs.deno.com/runtime/tutorials/http_server
-    await Deno.serve({ port, hostname }, requestHandler).finished;
+    await Deno.serve({
+        port,
+        hostname,
+    }, requestHandler).finished;
 }
 //TODO: remove
 class HTTPError extends Error {

@@ -148,16 +148,50 @@ Hello
 
 ### Via JavaScript/Brython
 
-#### Fetch
+#### Envoyer une requête avec fetch
 
-- fetch
-    -> cache / redirect
-    -> method
-    -> Request or url (+ body)
-    -> cf build request for body data
-    -> await response
-        -> status/statusText
-        -> cf read request to read data
+La fonction asynchrone <js-code>fetch(<var>$URL</var>[, <var>$RequestInit</var>])</js-code> envoie une requête HTTP et retourne un `Response`.
+
+`RequestInit` peut contenir les champs suivants :
+- `method` : la méthode HTTP à utiliser (e.g. `GET`) ;
+- `body` : le corps de la requête HTTP ;
+- `headers` : des en-têtes HTTP à ajouter à la requête ;
+- `cache` : la politique de cache à utiliser ;
+
+💡 Vous pouvez aussi construire un `Request` et le donner en paramètre de `fetch()`:
+```js
+const request = new Request("/foo", {
+    method: "POST",
+    body  : "faa"
+});
+
+fetch(request);
+```
+
+💡 La construction d'un `Request` est similaire par bien des aspects à la construction d'un `Response`.
+
+⚠ Contrairement à `Response`, `Request` ne dispose pas pour le moment d'une méthode statique `.json()` (cf [issue](https://github.com/whatwg/fetch/issues/1791)).<br/>
+Il convient ainsi d'utiliser :
+```js
+fetch(url, {
+    body: JSON.stringify({}),
+    headers: {
+        "Content-Type": "application/json"
+    }
+});
+```
+
+#### Lire une réponse
+
+`await fetch()` retourne un `Response` représentant la réponse du serveur.
+
+💡 La lecture d'un `Response` est similaire par bien des aspects à la lecture d'un `Request`.
+
+`Response` a les propriétés suivantes :
+- `.ok` : indique si la réponse représente un succès ;
+- `.status` : le code de status HTTP ;
+- `.statusText` : un message décrivant le code de status HTTP ;
+- `.headers` : les en-têtes de la réponse HTTP ;
 
 #### EventSource
 
