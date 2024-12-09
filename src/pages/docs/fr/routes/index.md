@@ -37,13 +37,46 @@ Le second paramètre des requests handlers contient, entres autres :
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=echo (vars)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
+## Route par défaut
 
-## Routes par défaut
+-> default behavior
 
-### Code d'erreurs
+💡 Vous pouvez redéfinir ce comportement via un *request handler* défini par `$ROUTES/default/GET.ts`.
 
-### Fichiers statics/assets
+💡 Vous pouvez redéfinir la route par défaut via les options :
 
+<style>
+table, th, td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+}
+
+tbody th {
+    text-align: left;
+}
+
+th,td {
+  padding: 5px;
+}
+</style>
+<table>
+    <thead>
+        <tr><th></th><th>CLI</th><th>TS</th></tr>
+    </thead>
+    <tbody>
+        <tr><th>Tous</th><td><js-code>--default</js-code></td><td><js-code>default</js-code></td></tr>
+        <tr><th>Route non trouvée</th><td><js-code>--not-found</js-code></td><td><js-code>not_found</js-code></td></tr>
+        <tr><th>Erreur non-capturée</th><td><js-code>--internal-error</js-code></td><td><js-code>internal_error</js-code></td></tr>
+    </tbody>
+</table>
+
+## Fichiers statics/assets
+
+System (helper ?)
+
+--assets
+--assets-prefix
+    + options
 
 </main>
     </body>

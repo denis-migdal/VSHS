@@ -36,10 +36,40 @@ Il suffit ainsi de créer un fichier <js-code>/produits/{ID}/GET.ts</js-code> po
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=echo (vars)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
+<h2 id="route-par-défaut">Route par défaut</h2>
+<p>-&gt; default behavior</p>
+<p>💡 Vous pouvez redéfinir ce comportement via un <em>request handler</em> défini par <code>$ROUTES/default/GET.ts</code>.</p>
+<p>💡 Vous pouvez redéfinir la route par défaut via les options :</p>
+<style>
+table, th, td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+}
 
-<h2 id="routes-par-défaut">Routes par défaut</h2>
-<h3 id="code-derreurs">Code d&#39;erreurs</h3>
-<h3 id="fichiers-staticsassets">Fichiers statics/assets</h3>
+tbody th {
+    text-align: left;
+}
+
+th,td {
+  padding: 5px;
+}
+</style>
+<table>
+    <thead>
+        <tr><th></th><th>CLI</th><th>TS</th></tr>
+    </thead>
+    <tbody>
+        <tr><th>Tous</th><td><js-code>--default</js-code></td><td><js-code>default</js-code></td></tr>
+        <tr><th>Route non trouvée</th><td><js-code>--not-found</js-code></td><td><js-code>not_found</js-code></td></tr>
+        <tr><th>Erreur non-capturée</th><td><js-code>--internal-error</js-code></td><td><js-code>internal_error</js-code></td></tr>
+    </tbody>
+</table>
+
+<h2 id="fichiers-staticsassets">Fichiers statics/assets</h2>
+<p>System (helper ?)</p>
+<p>--assets
+--assets-prefix
+    + options</p>
 </main>
     </body>
 </html>

@@ -1,6 +1,7 @@
 // /response (redirect)/GET.js
 
-export default async function(_, route) {
-    const target = route.url.origin + "/echo (url)";
+export default async function(request) {
+    const url    = new URL(request.url);
+    const target = url.origin + "/echo (url)";
     return Response.redirect(target);
 }

@@ -2,17 +2,26 @@
 if ("Deno" in globalThis && Deno.args.length) {
     const { parseArgs } = await import("jsr:@std/cli/parse-args");
     const args = parseArgs(Deno.args);
-    // deno run --allow-all index.ts route
+    /* --default	default
+Route non trouvée	--not-found	not_found
+Erreur non-capturée	--internal-error*/
     if (args.help) {
         console.log(`./VSHS.ts $ROUTES
-	--host : default locahost
-	--port : default 8080`);
+	--host          : (default locahost)
+	--port          : (default 8080)
+	--default       : (default /default)
+	--not_found     : (default --default)
+	--internal_error: (default --default)
+	`);
         Deno.exit(0);
     }
     startHTTPServer({
         port: args.port ?? 8080,
         hostname: args.host ?? "localhost",
-        routes: args._[0]
+        routes: args._[0],
+        default: args.default,
+        not_found: args.not_found,
+        internal_error: args.internal_error,
     });
 }
 export async function test(test_name, request, expected_response) {
@@ -72,7 +81,7 @@ export async function assertResponse(response, { status = 200, body = null, mime
 export function rootDir() {
     return Deno.cwd();
 }
-export default async function startHTTPServer({ port = 8080, hostname = "localhost", routes = "/routes", static: _static, logger = () => { } }) {
+export default async function startHTTPServer({ port = 8080, hostname = "localhost", routes = "/routes", default: _default = "/default/GET", not_found = _default, internal_error = _default, static: _static, logger = () => { } }) {
     let routesHandlers = routes;
     if (typeof routes === "string") {
         if (routes[0] === "/")
@@ -81,7 +90,12 @@ export default async function startHTTPServer({ port = 8080, hostname = "localho
     }
     if (_static?.[0] === "/")
         _static = rootDir() + _static;
-    const requestHandler = buildRequestHandler(routesHandlers, _static, logger);
+    const requestHandler = buildRequestHandler(routesHandlers, {
+        _static,
+        logger,
+        not_found,
+        internal_error
+    });
     // https://docs.deno.com/runtime/tutorials/http_server
     await Deno.serve({
         port,
@@ -267,77 +281,96 @@ function buildAnswer(response = null) {
     });
     return rep;
 }
-// use async ?
-//import { mimelite } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
-function buildRequestHandler(routes, _static, logger) {
+async function default_handler(request, opts) {
+    console.warn("called", opts, opts.error);
+    if ("error" in opts)
+        return new Response(opts.error.message, { status: 500 });
+    //TODO assets
+    return new Response(`${request.url} not found`, { status: 404 });
+    /*
+        // use async ?
+        //import { mimelite } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
+
+        if( _static === undefined )
+            throw new HTTPError(404, "Not found");
+
+        let filepath = `${_static}/${url.pathname}`;
+        let content!: Uint8Array;
+
+        try {
+            const info = await Deno.stat(filepath);
+
+            if( info.isDirectory )
+                filepath = `${filepath}/index.html`;
+
+            content = await Deno.readFile(filepath);
+
+        } catch(e) {
+
+            if(e instanceof Deno.errors.NotFound)
+                throw new HTTPError(404, "Not Found");
+            if( e instanceof Deno.errors.PermissionDenied )
+                throw new HTTPError(403, "Forbidden");
+            
+            throw new HTTPError(500, (e as any).message);
+        }
+
+        const parts = filepath.split('.');
+        const ext = parts[parts.length-1];
+
+        const mime = null; //mimelite.getType(ext) ?? "text/plain";
+        
+        throw new Error('not implemented');
+        //return await buildAnswer(200, content, mime);
+    */
+}
+const default_route = {
+    handler: default_handler,
+    path: "/default",
+    vars: {}
+};
+function buildRequestHandler(routes, { _static, logger, not_found = "/default/GET", internal_error = "/default/GET" }) {
     const regexes = routes.map(([uri, handler, is_bry]) => [path2regex(uri), handler, uri, is_bry]);
+    const not_found_route = [
+        getRouteHandler(regexes, "GET", not_found, false) ?? default_route,
+        getRouteHandler(regexes, "GET", not_found, true) ?? default_route
+    ];
+    const internal_error_route = [
+        getRouteHandler(regexes, "GET", internal_error, false) ?? default_route,
+        getRouteHandler(regexes, "GET", internal_error, true) ?? default_route
+    ];
     return async function (request, connInfo) {
         const ip = connInfo.remoteAddr.hostname;
         const url = new URL(request.url);
         let error = null;
         const method = request.method;
+        let answer;
+        let use_brython = null;
+        let route = null;
         try {
             if (method === "OPTIONS")
                 return new Response(null, { headers: CORS_HEADERS });
-            let use_brython = null;
             if (request.headers.has("use-brython"))
                 use_brython = request.headers.get("use-brython") === "true";
-            const route = getRouteHandler(regexes, method, url, use_brython);
-            console.warn(route);
-            if (route === null) {
-                if (_static === undefined)
-                    throw new HTTPError(404, "Not found");
-                let filepath = `${_static}/${url.pathname}`;
-                let content;
-                try {
-                    const info = await Deno.stat(filepath);
-                    if (info.isDirectory)
-                        filepath = `${filepath}/index.html`;
-                    content = await Deno.readFile(filepath);
-                }
-                catch (e) {
-                    if (e instanceof Deno.errors.NotFound)
-                        throw new HTTPError(404, "Not Found");
-                    if (e instanceof Deno.errors.PermissionDenied)
-                        throw new HTTPError(403, "Forbidden");
-                    throw new HTTPError(500, e.message);
-                }
-                const parts = filepath.split('.');
-                const ext = parts[parts.length - 1];
-                const mime = null; //mimelite.getType(ext) ?? "text/plain";
-                throw new Error('not implemented');
-                //return await buildAnswer(200, content, mime);
+            route = getRouteHandler(regexes, method, url, use_brython);
+            if (route !== null) {
+                answer = await route.handler(request, route);
             }
-            let answer = await route.handler(request, route);
+            else {
+                const _route = await not_found_route[+use_brython];
+                _route.route = route;
+                answer = await _route.handler(request, _route);
+            }
             return buildAnswer(answer);
         }
         catch (e) {
-            if (e instanceof Response)
-                return buildAnswer(e);
-            return buildAnswer(new Response(e.message, { status: 500 }));
-            // TODO: remove
-            /*
-            error = e;
-
-            let error_code = 500;
-            if( e instanceof HTTPError )
-                error_code = e.error_code;
-            else
-                console.error(e);
-
-            const error_url = new URL(`/errors/${error_code}`, url);
-            const route = getRouteHandler(regexes, "GET", error_url);
-            let answer  = e.message;
-            if(route !== null) {
-                try{
-                    answer = await route.handler({url, body: e.message}, route);
-                } catch(e) {
-                    console.error(e); // errors handlers shoudn't raise errors...
-                }
+            if (!(e instanceof Response)) {
+                const _route = internal_error_route[+use_brython];
+                _route.route = route;
+                _route.error = e;
+                e = await _route.handler(request, _route);
             }
-
-            return await buildAnswer(error_code, answer);
-            */
+            return buildAnswer(e);
         }
         finally {
             if (logger !== undefined)
@@ -359,7 +392,11 @@ export function match(regex, uri) {
     return result.groups ?? {};
 }
 function getRouteHandler(regexes, method, url, use_brython = null) {
-    let curRoute = `${decodeURI(url.pathname)}/${method}`;
+    let curRoute;
+    if (typeof url === "string")
+        curRoute = `${url}/${method}`;
+    else
+        curRoute = `${decodeURI(url.pathname)}/${method}`;
     for (let route of regexes) {
         if (use_brython !== null && route[3] !== use_brython)
             continue;
@@ -368,8 +405,7 @@ function getRouteHandler(regexes, method, url, use_brython = null) {
             return {
                 handler: route[1],
                 path: route[2],
-                vars,
-                url
+                vars
             };
     }
     return null;
