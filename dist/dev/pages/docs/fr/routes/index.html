@@ -65,16 +65,29 @@ th,td {
     </thead>
     <tbody>
         <tr><th>Tous</th><td><js-code>--default</js-code></td><td><js-code>default</js-code></td></tr>
-        <tr><th>Route non trouvée</th><td><js-code>--not-found</js-code></td><td><js-code>not_found</js-code></td></tr>
-        <tr><th>Erreur non-capturée</th><td><js-code>--internal-error</js-code></td><td><js-code>internal_error</js-code></td></tr>
+        <tr><th>Route non trouvée</th><td><js-code>--not_found</js-code></td><td><js-code>not_found</js-code></td></tr>
+        <tr><th>Erreur non-capturée</th><td><js-code>--internal_error</js-code></td><td><js-code>internal_error</js-code></td></tr>
     </tbody>
 </table>
 
-<h2 id="todo-assets">[TODO] Assets</h2>
-<p>System (helper ?)</p>
-<p>--assets
---assets-prefix
-    + options</p>
+<h2 id="assets">Assets</h2>
+<p>Les assets sont des fichiers statiques lus par le serveur puis renvoyés comme réponse.</p>
+<p>VSHS offre quelques helpers pour cela :</p>
+<ul>
+<li><code>fetchAsset(path)</code> : retourne un <code>ReadableStream</code> sur le fichier (lance une exception si n&#39;existe pas).</li>
+<li><code>getMime(path)</code> : retourne le type-mime à partir du nom de fichier.</li>
+</ul>
+<p>Pa défault, si une route n&#39;est pas trouvée ( et si le chemin commence par la valeur indiquée par <code>assets_prefix</code>), VSHS servira, s&#39;il existe, le fichier correspond.</p>
+<table>
+    <thead>
+        <tr><th></th><th>CLI</th><th>TS</th></tr>
+    </thead>
+    <tbody>
+        <tr><th>Dossier contenant les assets</th><td><js-code>--assets</js-code></td><td><js-code>assets</js-code></td></tr>
+        <tr><th>Préfixe du chemin</th><td><js-code>--assets_prefix</js-code></td><td><js-code>assets_prefix</js-code></td></tr>
+    </tbody>
+</table>
+
 </main>
     </body>
 </html>

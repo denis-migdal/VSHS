@@ -69,18 +69,30 @@ th,td {
     </thead>
     <tbody>
         <tr><th>Tous</th><td><js-code>--default</js-code></td><td><js-code>default</js-code></td></tr>
-        <tr><th>Route non trouvée</th><td><js-code>--not-found</js-code></td><td><js-code>not_found</js-code></td></tr>
-        <tr><th>Erreur non-capturée</th><td><js-code>--internal-error</js-code></td><td><js-code>internal_error</js-code></td></tr>
+        <tr><th>Route non trouvée</th><td><js-code>--not_found</js-code></td><td><js-code>not_found</js-code></td></tr>
+        <tr><th>Erreur non-capturée</th><td><js-code>--internal_error</js-code></td><td><js-code>internal_error</js-code></td></tr>
     </tbody>
 </table>
 
-## [TODO] Assets
+## Assets
 
-System (helper ?)
+Les assets sont des fichiers statiques lus par le serveur puis renvoyés comme réponse.
 
---assets
---assets-prefix
-    + options
+VSHS offre quelques helpers pour cela :
+- `fetchAsset(path)` : retourne un `ReadableStream` sur le fichier (lance une exception si n'existe pas).
+- `getMime(path)` : retourne le type-mime à partir du nom de fichier.
+
+Pa défault, si une route n'est pas trouvée ( et si le chemin commence par la valeur indiquée par `assets_prefix`), VSHS servira, s'il existe, le fichier correspond.
+
+<table>
+    <thead>
+        <tr><th></th><th>CLI</th><th>TS</th></tr>
+    </thead>
+    <tbody>
+        <tr><th>Dossier contenant les assets</th><td><js-code>--assets</js-code></td><td><js-code>assets</js-code></td></tr>
+        <tr><th>Préfixe du chemin</th><td><js-code>--assets_prefix</js-code></td><td><js-code>assets_prefix</js-code></td></tr>
+    </tbody>
+</table>
 
 </main>
     </body>

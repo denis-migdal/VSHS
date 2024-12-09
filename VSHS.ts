@@ -12,6 +12,8 @@ Erreur non-capturée	--internal-error*/
 
 	if( args.help ) {
 		console.log(`./VSHS.ts $ROUTES
+	--assets        : (default undefined)
+	--assets_prefix : (default "")
 	--host          : (default locahost)
 	--port          : (default 8080)
 	--default       : (default /default)
@@ -22,12 +24,14 @@ Erreur non-capturée	--internal-error*/
 	}
 
 	startHTTPServer({
-		port    : args.port ?? 8080,
-		hostname: args.host ?? "localhost",
-		routes  : args._[0] as string,
+		port          : args.port ?? 8080,
+		hostname      : args.host ?? "localhost",
+		routes        : args._[0] as string,
+		assets        : args.assets,
+		assets_prefix : args.assets_prefix,
 		default       : args.default,
 		not_found     : args.not_found,
-		internal_error: args.internal_error,
+		internal_error: args.internal_error, 
 	})
 
 }
@@ -127,8 +131,9 @@ type HTTPServerOpts = {
 	not_found      : string,
 	internal_error : string,
 
-	static?: string|undefined,
-	logger?: Logger // not documented
+	assets       ?: string|undefined,
+	assets_prefix?: string|undefined,
+	logger       ?: Logger // not documented
 };
 
 
@@ -142,7 +147,8 @@ export default async function startHTTPServer({ port = 8080,
 												default: _default = "/default/GET",
 												not_found      = _default,
 												internal_error = _default,
-												static: _static,
+												assets,
+												assets_prefix = "/",
 												logger = () => {}
 											}: HTTPServerOpts) {
 
@@ -154,11 +160,12 @@ export default async function startHTTPServer({ port = 8080,
 		routesHandlers = await loadAllRoutesHandlers(routes);
 	}
 	
-	if(_static?.[0] === "/")
-		_static = rootDir() + _static;
+	if(assets?.[0] === "/")
+		assets = rootDir() + assets;
 	
-	const requestHandler = buildRequestHandler(routesHandlers, {
-		_static,
+	const requestHandler = await buildRequestHandler(routesHandlers, {
+		assets,
+		assets_prefix,
 		logger,
 		not_found,
 		internal_error
@@ -223,9 +230,30 @@ export const VSHS = {
 
 
 		return new Response(stream, options);
+	},
+	async getMime(path: string) {
 
+		const pos = path.lastIndexOf('.');
+		const ext = path.slice(pos+1);
+
+		return (await loadMime()).getType(ext) ?? "text/plain";
+	},
+	async fetchAsset(path: string) {
+
+		if(path[0] !== "/")
+			path = rootDir() + path;
+
+		return (await Deno.open(path)).readable;
 	}
 };
+
+let mimelite: any = null;
+async function loadMime() {
+	if( mimelite === null )
+		mimelite = import("jsr:https://deno.land/x/mimetypes@v1.0.0/mod.ts");
+	return await mimelite;
+}
+
 // @ts-ignore
 globalThis.VSHS = VSHS;
 
@@ -405,7 +433,8 @@ function buildAnswer(response: Response|null = null) {
 }
 
 type buildRequestHandlerOpts = {
-	_static?: string|undefined,
+	assets       ?: string,
+	assets_prefix?: string,
 	logger?: Logger,
 	not_found     : string,
 	internal_error: string
@@ -416,67 +445,69 @@ type DefaultRouteOpts = {
 	error  ?: Error,
 } & Route;
 
-async function default_handler(request: Request, opts: DefaultRouteOpts) {
 
-	if( "error" in opts )
-		return new Response(opts.error!.message, {status: 500});
+async function buildDefaultRoute(assets?: string, assets_prefix: string = "") {
 
-	//TODO assets
 
-	return new Response(`${request.url} not found`, {status: 404});
 
-	/*
-		// use async ?
-		//import { mimelite } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
+	async function default_handler(request: Request, opts: DefaultRouteOpts) {
 
-		if( _static === undefined )
-			throw new HTTPError(404, "Not found");
+		if( "error" in opts )
+			return new Response(opts.error!.message, {status: 500});
 
-		let filepath = `${_static}/${url.pathname}`;
-		let content!: Uint8Array;
+		let pathname = new URL(request.url).pathname;
+		if( assets === undefined ) {
 
-		try {
-			const info = await Deno.stat(filepath);
+			let uri = pathname;
+			if( uri.startsWith(assets_prefix) )
+				uri = uri.slice(assets_prefix.length);
+		
+			let filepath = `${assets}/${uri}`;
 
-			if( info.isDirectory )
-				filepath = `${filepath}/index.html`;
+			try {
+				const info = await Deno.stat(filepath);
 
-			content = await Deno.readFile(filepath);
+				if( info.isDirectory )
+					filepath = `${filepath}/index.html`;
 
-		} catch(e) {
+				const [stream, mime] = await Promise.all([VSHS.fetchAsset(filepath),
+														  VSHS.getMime(filepath)]);
+				return new Response(stream, {headers: {"Content-Type": mime}});
 
-			if(e instanceof Deno.errors.NotFound)
-				throw new HTTPError(404, "Not Found");
-			if( e instanceof Deno.errors.PermissionDenied )
-				throw new HTTPError(403, "Forbidden");
-			
-			throw new HTTPError(500, (e as any).message);
+			} catch(e) {
+
+				if( ! (e instanceof Deno.errors.NotFound) ) {
+					
+					if( e instanceof Deno.errors.PermissionDenied )
+						return new Response(`${pathname} access denied`, {status: 403});
+					
+					throw e; // will be caught again.
+				}
+			}
 		}
 
-		const parts = filepath.split('.');
-		const ext = parts[parts.length-1];
+		return new Response(`${pathname} not found`, {status: 404});
+	}
 
-		const mime = null; //mimelite.getType(ext) ?? "text/plain";
-		
-		throw new Error('not implemented');
-		//return await buildAnswer(200, content, mime);
-	*/
+	return {
+		handler: default_handler,
+		path   : "/default",
+		vars   : {}
+	}
 }
 
-const default_route = {
-	handler: default_handler,
-	path   : "/default",
-	vars   : {}
-}
 
-function buildRequestHandler(routes: Routes, {
-	_static,
+async function buildRequestHandler(routes: Routes, {
+	assets,
+	assets_prefix,
 	logger ,
 	not_found      = "/default/GET",
 	internal_error = "/default/GET"
 }: Partial<buildRequestHandlerOpts>) {
 
 	const regexes = routes.map( ([uri, handler, is_bry]) => [path2regex(uri), handler, uri, is_bry] as const);
+
+	const default_route = await buildDefaultRoute(assets, assets_prefix);
 
 	const not_found_route = [
 		getRouteHandler(regexes, "GET", not_found, false) ?? default_route,
