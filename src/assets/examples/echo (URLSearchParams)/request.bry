@@ -1,0 +1,14 @@
+from browser import self
+
+async def main():
+    r = await self.fetch("/echo (URLSearchParams)", {
+        "method": "POST",
+        "body"  : self.URLSearchParams.new({
+                    "a":"42",
+                    "b":"1337"
+                })
+    });
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

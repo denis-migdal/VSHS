@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>VSHS</title>
+        <!--
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="cyan" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+        -->
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="./index.css"  rel="stylesheet" blocking="render">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.13.0/brython.min.js"></script>
+        <script  src="./index.js"  type="module"     blocking="render" async></script>
+    </head>
+    <body>
+        <main>
+
+<h1 id="lire-une-requête-http-reçue">Lire une requête HTTP reçue</h1>
+<p>La requête HTTP reçue est donnée par le premier argument du <em>request handler</em> sous la forme d&#39;une instance de <a href="https://developer.mozilla.org/fr/docs/Web/API/Request"><code>Request</code></a>.</p>
+<h2 id="lire-le-contenu-de-la-réponse">Lire le contenu de la réponse</h2>
+<p>En général vous souhaiterez lire les données au format JSON grâce à la méthode asynchrone <code>.json()</code> :</p>
+<vshs-playground name="echo (json)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (json)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+<p>Vous pouvez aussi utiliser d&#39;autres méthodes asynchrone de <code>Response</code> afin de lire différent types de données (cliquez pour afficher) :</p>
+<details>
+    <summary><b>Texte</b> : avec <js-code>.text()</js-code>, retourne un <js-code>string</js-code>.</summary>
+    <vshs-playground name="echo (string)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (string)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+</details>
+<details>
+    <summary><b>Paires clefs-valeurs</b> : avec <js-code>.formData()</js-code>, retourne un <a href="https://developer.mozilla.org/fr/docs/Web/API/FormData"><js-code>FormData</js-code></a> (peut servir à initialiser un  <a href="https://developer.mozilla.org/fr/docs/Web/API/URLSearchParams"><js-code>URLSearchParams</js-code></a>).</summary>
+    <vshs-playground name="echo (URLSearchParams)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (URLSearchParams)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+    <vshs-playground name="echo (FormData)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (FormData)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+    💡 Préférez les <js-code>URLFormParams</js-code> aux <js-code>FormData</js-code>, le format de ces derniers changeant en fonction de la plateforme utilisée.
+</details>
+<details>
+    <summary><b>Données binaires</b> : usuellement avec <js-code>.bytes()</js-code>, retourne un <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array"><js-code>Uint8Array</js-code></a>, mais aussi <js-code>.arrayBuffer()</js-code>, retourne un <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer"><js-code>ArrayBuffer</js-code></a>.</summary>
+    <vshs-playground name="echo (Uint8Array)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (Uint8Array)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+</details>
+<details>
+    <summary><b>Fichiers</b> : avec `.blob()`, retourne un <a href="https://developer.mozilla.org/fr/docs/Web/API/Blob"><js-code>Blob</js-code></a>.</summary>
+    <vshs-playground name="echo (Blob)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (Blob)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+</details>
+<details>
+    <summary><b>Flux</b> : avec <js-code>.body</js-code>, retourne un <a href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream"><js-code>ReadableStream</js-code></a>.</summary>
+    <vshs-playground name="echo (body)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (body)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+</details>
+
+<p>⚠ Le corps de la requête ne peut être lue qu&#39;une seule fois. La propriété <code>.bodyUsed</code> indique s&#39;il a été lu.</p>
+<h2 id="extraire-des-informations-de-lurl">Extraire des informations de l&#39;URL</h2>
+<ul>
+<li>method ?</li>
+</ul>
+<h2 id="en-tête">En-tête</h2>
+<p>[TODO]</p>
+</main>
+    </body>
+</html>

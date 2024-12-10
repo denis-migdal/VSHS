@@ -1,0 +1,15 @@
+from browser import self
+
+body = self.FormData.new();
+body.set("a", "42")
+body.set("b", "1337")
+
+async def main():
+    r = await self.fetch("/echo (FormData)", {
+        "method": "POST",
+        "body"  : body
+    });
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

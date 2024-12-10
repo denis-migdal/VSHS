@@ -1,0 +1,7 @@
+#  /echo (Uint8Array)/POST.bry
+
+from browser import self
+
+async def RequestHandler(request, _):
+    received = await request.bytes()
+    return self.Response.new(received)

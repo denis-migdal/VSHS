@@ -45,10 +45,9 @@ Par exemple, la requête HTTP <js-code>GET /foo/faa</js-code> sera traitée par 
 Vous pouvez en apprendre plus sur la manière d'utiliser VSHS via les liens suivants :
 - [Démarrer et requêter le serveur HTTP](./server) ;
 - [Construire une réponse HTTP (à retourner)](./response) ;
-- [TODO] Lire une requête HTTP reçue.
-- [Définir une route](./routes)
+- [Lire une requête HTTP reçue](./request) ;
+- [Définir une route](./routes).
 
-+ remove dead code... (parse/generate/HTTP Error)
 + move test functions outside of VSHS.ts
 
 </main>

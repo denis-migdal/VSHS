@@ -1,0 +1,8 @@
+#  /echo (URLSearchParams)/POST.bry
+
+from browser import self
+
+async def RequestHandler(request, _):
+    received = await request.formData()
+    received = self.URLSearchParams.new(received)
+    return self.Response.new(received)

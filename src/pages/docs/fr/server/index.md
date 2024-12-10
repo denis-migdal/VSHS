@@ -170,8 +170,10 @@ fetch(request);
 
 💡 La construction d'un `Request` est similaire par bien des aspects à la construction d'un `Response`.
 
+💡 Pour répéter une requête, vous pouvez construire un <js-code>Request</js-code> que vous clonerez avant de le transmettre à `fetch()`.
+
 ⚠ Contrairement à `Response`, `Request` ne dispose pas pour le moment d'une méthode statique `.json()` (cf [issue](https://github.com/whatwg/fetch/issues/1791)).<br/>
-Il convient ainsi d'utiliser :
+Il convient alors d'utiliser :
 ```js
 fetch(url, {
     body: JSON.stringify({}),

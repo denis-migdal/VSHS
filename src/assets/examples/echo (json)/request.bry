@@ -1,0 +1,14 @@
+from browser import self
+
+async def main():
+    r = await self.fetch("/echo (json)", {
+        "method": "POST",
+        "body"  : self.JSON.stringify({"a":42}),
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    });
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

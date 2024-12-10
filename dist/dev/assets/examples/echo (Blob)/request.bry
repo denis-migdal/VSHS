@@ -1,0 +1,13 @@
+from browser import self
+
+async def main():
+    r = await self.fetch("/echo (Blob)", {
+        "method": "POST",
+        "body"  : self.Blob.new(["a,b"], {
+                type: "text/csv"
+            })
+    });
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

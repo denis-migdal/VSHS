@@ -141,8 +141,9 @@ Hello
 fetch(request);
 </code></pre>
 <p>💡 La construction d&#39;un <code>Request</code> est similaire par bien des aspects à la construction d&#39;un <code>Response</code>.</p>
+<p>💡 Pour répéter une requête, vous pouvez construire un <js-code>Request</js-code> que vous clonerez avant de le transmettre à <code>fetch()</code>.</p>
 <p>⚠ Contrairement à <code>Response</code>, <code>Request</code> ne dispose pas pour le moment d&#39;une méthode statique <code>.json()</code> (cf <a href="https://github.com/whatwg/fetch/issues/1791">issue</a>).<br/>
-Il convient ainsi d&#39;utiliser :</p>
+Il convient alors d&#39;utiliser :</p>
 <pre><code class="language-js">fetch(url, {
     body: JSON.stringify({}),
     headers: {
