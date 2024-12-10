@@ -102,17 +102,6 @@ const result = $B.runPythonSource(\`${request}\`);`;
         if( use_server )
             handler_code.reset();
 
-        const WebSocket_override = `
-class NWebSocket extends window.WebSocket {
-    constructor(url) {
-        super("${this.host.getAttribute('server')}" + url)
-    }
-}
-
-const _WebSocket = window.WebSocket;
-const WebSocket = window.WebSocket = NWebSocket;
-`;
-
         const server = use_server ? `"${this.host.getAttribute("server")}"`
                                   : "null";
 
@@ -180,8 +169,11 @@ const WebSocket = window.WebSocket = NWebSocket;
             <script type="text/javascript" src="${brython_script}"></script>
             <script type="module" defer>
 
-                import {match, path2regex,
-                        getFakeEventSource} from "${rootdir}/dist/dev/index.js";
+                import {
+                        match, path2regex,
+                        getFakeEventSource,
+                        getFakeWebSocket
+                    } from "${rootdir}/dist/dev/index.js";
 
                 const handler_code = \`${js_code}\`;
                 const blob = new Blob([handler_code], {type: "text/javascript"});
@@ -196,8 +188,7 @@ const WebSocket = window.WebSocket = NWebSocket;
                 }
 
                 const EventSource = window.EventSource = getFakeEventSource(${server}, handler);
-
-                ${WebSocket_override}
+                const WebSocket   = window.WebSocket   = getFakeWebSocket  (${server}, handler);
 
                 ${fetch_override}
                 

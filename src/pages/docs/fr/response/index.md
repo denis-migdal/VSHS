@@ -157,8 +157,6 @@ Les [`WebSocket`](https://developer.mozilla.org/fr/docs/Web/API/WebSocket) perme
 
 ⚠ Vous devez attendre que la connexion soit ouverte avant d'envoyer des données (i.e. attendre l'événement `open`).
 
-⚠ Actuellement, l'exemple ne peut être simulé dans le navigateur. Utilisez le bac à sable avec le serveur afin d'exécuter l'exemple.
-
 💡 Progressivement, les WebSockets ont vocation à être remplacés par l'API [`WebTransport`](https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API). Cependant, comme pour les flux, il s'agit d'une API bas niveau.
 
 </main>

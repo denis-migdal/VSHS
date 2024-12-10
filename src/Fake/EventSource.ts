@@ -18,12 +18,7 @@ class EventSourceFake extends EventTarget implements EventSource {
         super();
         this.url = url;
 
-
-        console.warn("build");
-
         globalThis.fetch(url).then( async (response) => {
-
-            console.warn("answer");
 
             this.readyState = this.OPEN;
             this.dispatchEvent( new Event("open") );
@@ -33,11 +28,7 @@ class EventSourceFake extends EventTarget implements EventSource {
             let buffer = "";
             let chunk = await reader.read();
 
-            console.warn("chunk", chunk);
-
             while( ! chunk.done ) {
-
-                console.warn("chunk received");
 
                 buffer += chunk.value!;
 
@@ -50,8 +41,6 @@ class EventSourceFake extends EventTarget implements EventSource {
 
                     data.event ??= "message";
 
-                    console.warn("dispatch", data);
-
                     this.dispatchEvent( new MessageEvent(data.event, {data: data.data}) )
 
                     buffer = buffer.slice(pos + 2);
@@ -61,8 +50,6 @@ class EventSourceFake extends EventTarget implements EventSource {
                 chunk = await reader.read();
             }
         });
-
-        //TODO: get the response + read stream + dispatchEvent
     }
     onerror  : ((this: EventSource, ev: Event       ) => any) | null = null;
     onmessage: ((this: EventSource, ev: MessageEvent) => any) | null = null;
