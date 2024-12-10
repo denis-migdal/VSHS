@@ -204,8 +204,6 @@ On peut alors utiliser `new EventSource(url)` afin de lire les événements envo
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=fetch (SSE)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
-⚠ Actuellement, l'exemple ne peut être simulé dans le navigateur. Utilisez le bac à sable avec le serveur afin d'exécuter l'exemple.
-
 💡 Progressivement, `EventSource` a vocation à être remplacé par les flux fetch. Cependant, il s'agit d'une API bas niveau.
 
 #### WebSocket

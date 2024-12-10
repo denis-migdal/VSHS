@@ -5,7 +5,6 @@ from browser import self
 async def RequestHandler(request, _):
     
     events = """event: message
-event: message
 data: {"i":0}
 
 event: message
@@ -15,7 +14,6 @@ event: message
 data: {"i":2}
 
 event: close
-data: {"i":2}
 
 """;
 

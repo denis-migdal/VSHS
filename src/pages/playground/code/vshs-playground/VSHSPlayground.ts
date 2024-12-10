@@ -102,17 +102,6 @@ const result = $B.runPythonSource(\`${request}\`);`;
         if( use_server )
             handler_code.reset();
 
-        const EventSource_override = `
-            class NEventSource extends window.EventSource {
-                constructor(url) {
-                    super("${this.host.getAttribute('server')}" + url);
-                }
-            }
-
-            const _EventSource = window.EventSource;
-            const EventSource = window.EventSource = NEventSource;
-        `;
-
         const WebSocket_override = `
 class NWebSocket extends window.WebSocket {
     constructor(url) {
@@ -123,6 +112,10 @@ class NWebSocket extends window.WebSocket {
 const _WebSocket = window.WebSocket;
 const WebSocket = window.WebSocket = NWebSocket;
 `;
+
+        const server = use_server ? `"${this.host.getAttribute("server")}"`
+                                  : "null";
+
 
         if( use_server )
             fetch_override = `
@@ -145,8 +138,6 @@ const WebSocket = window.WebSocket = NWebSocket;
                     const url = new URL(request.url);
                     const uri = \`\${ decodeURI(url.pathname) }/\${request.method}\`
                     const vars = match(reg, uri);
-
-                    console.warn(path, uri);
 
                     const route = {
                         url,
@@ -189,7 +180,8 @@ const WebSocket = window.WebSocket = NWebSocket;
             <script type="text/javascript" src="${brython_script}"></script>
             <script type="module" defer>
 
-                import {match, path2regex} from "${rootdir}/dist/dev/index.js";
+                import {match, path2regex,
+                        getFakeEventSource} from "${rootdir}/dist/dev/index.js";
 
                 const handler_code = \`${js_code}\`;
                 const blob = new Blob([handler_code], {type: "text/javascript"});
@@ -203,7 +195,7 @@ const WebSocket = window.WebSocket = NWebSocket;
 \${await r.text()}\`
                 }
 
-                ${EventSource_override}
+                const EventSource = window.EventSource = getFakeEventSource(${server}, handler);
 
                 ${WebSocket_override}
 
