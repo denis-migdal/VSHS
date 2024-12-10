@@ -6,60 +6,11 @@
 
 Documentation (fr) : https://denis-migdal.github.io/VSHS/dist/dev/pages/docs/fr/
 
-## Build documentation
+## Build the documentation
 
 - `npm run build`
 - `npm run watch`
 
-# OLD
+## TODO
 
-### Mime-type
-
-| Return            | Mime                                              |
-| ----------------- | ------------------------------------------------- |
-| `string`          | `text/plain`                                      |
-| `URLSearchParams` | `application/x-www-form-urlencoded`               |
-| `FormData`        | `application/x-www-form-urlencoded`               |
-| `Uint8Array`      | `application/octet-stream`                        |
-| `Blob`            | `blob.type`<br/>or<br/>`application/octet-stream` |
-| `any`             | `application/json`                                |
-| `SSEResponse`     | `text/event-stream`                               |
-
-| Mime                                | Result               |
-| ----------------------------------- | -------------------- |
-| No body                             | `null`               |
-| `text/plain`                        | `string` or `Object` |
-| `application/x-www-form-urlencoded` | `Object`             |
-| `application/json`                  | `Object`             |
-| `application/octet-stream`          | `Uint8Array`         |
-| others                              | `Blob`               |
-
-💡 The default mime-types set by the client are :
-
-| Source            | Mime-type                           |
-| ----------------- | ----------------------------------- |
-| `string`          | `text/plain`                        |
-| `URLSearchParams` | `application/x-www-form-urlencoded` |
-| `FormData`        | `application/x-www-form-urlencoded` |
-| `Uint8Array`      | None                                |
-| `Blob`            | `blob.type` or none                 |
-| `curl -d`         | `application/x-www-form-urlencoded` |
-
-💡 To provide an explicit mime-type in the query :
-
-```typescript
-fetch('...', {body: ..., headers: {"Content-Type", "..."})
-```
-
-### Static ressources
-
-You can also provide a directory containing static files 
-
-```ts
-startHTTPServer({
-  port: 8080,
-  hostname: 'localhost',
-  routes: '/routes',
-  static: '/assets'
-});
-```
+- move test functions outside of VSHS.ts

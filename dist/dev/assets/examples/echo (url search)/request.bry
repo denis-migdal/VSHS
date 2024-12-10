@@ -1,0 +1,8 @@
+from browser import self
+
+async def main():
+    r = await self.fetch("/echo (url search)?a=42&b=1337")
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

@@ -69,7 +69,11 @@ Vous pouvez aussi utiliser d'autres méthodes asynchrone de `Response` afin de l
 
 ## Extraire des informations de l'URL
 
-+ method ?
+L'URL utilisée pour générer la requête est stockée dans `request.url`. À partir de celle-ci vous pouvez générer un `URLSearchParams` afin de manipuler les paramètres transmis via l'URL :
+
+<vshs-playground name="echo (url search)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (url search)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 ## En-tête
 

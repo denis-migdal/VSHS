@@ -1,0 +1,8 @@
+#  /echo (url search)/GET.bry
+
+from browser import self
+
+async def RequestHandler(request, _):
+    url    = self.URL.new(request.url);
+    search = self.URLSearchParams.new(url.search);
+    return self.Response.new(search)

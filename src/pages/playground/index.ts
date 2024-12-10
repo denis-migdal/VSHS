@@ -6,6 +6,7 @@ import "./code/vshs-playground/VSHSPlayground";
 const examples = [
     "Hello World",
     "echo (url)",
+    "echo (url search)",
     "echo (body)",
     "echo (json)",
     "echo (string)",
