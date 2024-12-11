@@ -110,7 +110,7 @@ Son premier paramètre est l'URL vers laquelle rediriger, et son second paramèt
 
 ## En-tête
 
-Vous pouvez préciser des en-têtes à inclure à la réponse HTTP via une instance de une instance de [`Headers`](https://developer.mozilla.org/fr/docs/Web/API/Headers), ou via un tableau associatif :
+Vous pouvez préciser des en-têtes à inclure à la réponse HTTP via une instance [`Headers`](https://developer.mozilla.org/fr/docs/Web/API/Headers), ou via un tableau associatif :
 
 <vshs-playground name="response (headers)" show="index.code,output">
 </vshs-playground>
