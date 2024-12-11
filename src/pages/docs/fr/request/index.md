@@ -77,7 +77,13 @@ L'URL utilisée pour générer la requête est stockée dans `request.url`. À p
 
 ## En-tête
 
-[TODO]
+Vous pouvez accéder aux en-têtes de la requête via la propriété `.headers` retournant une instance de [`Headers`](https://developer.mozilla.org/fr/docs/Web/API/Headers).
+
+<vshs-playground name="echo (body)" show="index.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (body)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
+
 
 </main>
     </body>

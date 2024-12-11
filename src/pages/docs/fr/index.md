@@ -48,8 +48,6 @@ Vous pouvez en apprendre plus sur la manière d'utiliser VSHS via les liens suiv
 - [Lire une requête HTTP reçue](./request) ;
 - [Définir une route](./routes).
 
-+ move test functions outside of VSHS.ts
-
 </main>
     </body>
 </html>
