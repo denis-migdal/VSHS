@@ -1,5 +1,4 @@
 import { _element2tagname } from "./utils";
-let x;
 // Go to state DEFINED
 export function define(tagname, ComponentClass) {
     let Host = ComponentClass;

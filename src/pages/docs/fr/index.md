@@ -21,8 +21,8 @@
 VSHS vous permet de créer très facilement votre propre serveur Web HTTP.
 
 Pour cela, il vous suffit de définir une fonction (*request handler*) qui répondra aux requêtes reçues par votre serveur, avec :
-- en **entrée**, la *requête HTTP* ([`Request`](https://developer.mozilla.org/fr/docs/Web/API/Request)) reçue ;
-- en **sortie**, la *réponse HTTP* ([`Response`](https://developer.mozilla.org/fr/docs/Web/API/Response)) à retourner.
+- en **entrée**, la *requête HTTP* ([<script type="c-js">Request</script>](https://developer.mozilla.org/fr/docs/Web/API/Request)) reçue ;
+- en **sortie**, la *réponse HTTP* ([<script type="c-js">Response</script>](https://developer.mozilla.org/fr/docs/Web/API/Response)) à retourner.
 
 
 <vshs-playground name="echo (url)" show="index.code,output">
@@ -32,15 +32,16 @@ Pour cela, il vous suffit de définir une fonction (*request handler*) qui répo
 💡 Vous pouvez changer le langage (JavaScript ou Brython) via l'icône en haut à droite de la page.<br/>
 💡 [TODO] Learn more about playground.
 
-Les *requests handlers* sont définis dans un dossier <js-code class="d4rk"><var>$ROUTES</var></js-code> de votre choix. Les requêtes HTTP effectuées sur la route (≈ensemble d'URL) <js-code class="d4rk"><var>$PATH</var></js-code> sont alors traitées par les *requests handlers* définis dans le sous-dossier <js-code class="d4rk"><var>$ROUTES</var>/<var>$PATH</var>/</js-code>.<br/>
-Par exemple, les requêtes HTTP effectuées sur l'URL <js-code class="d4rk">/foo/faa</js-code> seront traitées par les *requests handlers* contenus dans le sous-dossier <js-code class="d4rk"><var>$ROUTES</var>/foo/faa/</js-code>.
+Les *requests handlers* sont définis dans un dossier <script type="c-text"><h>$ROUTES</h></script> de votre choix. Les requêtes HTTP effectuées sur la route (≈ensemble d'URL) <script type="c-text"><h>$PATH</h></script> sont alors traitées par les *requests handlers* définis dans le sous-dossier <script type="c-text"><h>$ROUTES</h>/<h>$PATH</h>/</script>.<br/>
+Par exemple, les requêtes HTTP effectuées sur l'URL <script type="c-text">/foo/faa</script> seront traitées par les *requests handlers* contenus dans le sous-dossier <script type="c-text"><h>$ROUTES</h>/foo/faa/</script>.
 
 Dans ce sous-dossier, chaque fichier défini le *request handler* qui traitera la méthode HTTP de même nom.
-Par exemple, la requête HTTP <js-code>GET /foo/faa</js-code> sera traitée par le *request handler* contenu dans le fichier <js-code class="d4rk"><var>$ROUTES</var>/foo/faa/GET.ts</js-code> (ou <js-code>.js</js-code>/<js-code>.bry</js-code>).
+Par exemple, la requête HTTP <script type="c-text">GET /foo/faa</script> sera traitée par le *request handler* contenu dans le fichier <script type="c-text"><h>$ROUTES</h>/foo/faa/GET.ts</script>\
+(ou <script type="c-text">GET.js</script>/<script type="c-text">GET.bry</script>).
 
 ⚠ Pour que les *requests handlers* puissent être correctement chargés dans VSHS :
-- Les fichiers JavaScript (.js) et TypeScript (.ts) doivent faire un export par défaut du *request handler* (<j-code>export default</js-code>).
-- Les fichiers Brython doivent nommer le *request handler* <py-code>RequestHandler</py-code>.
+- Les fichiers TypeScript/JavaScript doivent faire un export par défaut du *request handler* (<script type="c-js">export default</script>).
+- Les fichiers Brython doivent nommer le *request handler* <script type="c-python">RequestHandler</script>.
 
 Vous pouvez en apprendre plus sur la manière d'utiliser VSHS via les liens suivants :
 - [Démarrer et requêter le serveur HTTP](./server) ;

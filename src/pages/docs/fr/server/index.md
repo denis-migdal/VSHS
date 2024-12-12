@@ -152,6 +152,10 @@ Hello
 
 La fonction asynchrone <js-code>fetch(<var>$URL</var>[, <var>$RequestInit</var>])</js-code> envoie une requête HTTP et retourne un `Response`.
 
+<vshs-playground name="echo (string)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (string)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
 `RequestInit` peut contenir les champs suivants :
 - `method` : la méthode HTTP à utiliser (e.g. `GET`) ;
 - `body` : le corps de la requête HTTP ;
@@ -159,29 +163,26 @@ La fonction asynchrone <js-code>fetch(<var>$URL</var>[, <var>$RequestInit</var>]
 - `cache` : la politique de cache à utiliser ;
 
 💡 Vous pouvez aussi construire un `Request` et le donner en paramètre de `fetch()`:
-```js
-const request = new Request("/foo", {
-    method: "POST",
-    body  : "faa"
-});
 
-fetch(request);
-```
+<vshs-playground name="fetch (request)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (request)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 💡 La construction d'un `Request` est similaire par bien des aspects à la construction d'un `Response`.
 
 💡 Pour répéter une requête, vous pouvez construire un <js-code>Request</js-code> que vous clonerez avant de le transmettre à `fetch()`.
 
+<vshs-playground name="fetch (clone)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (clone)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
 ⚠ Contrairement à `Response`, `Request` ne dispose pas pour le moment d'une méthode statique `.json()` (cf [issue](https://github.com/whatwg/fetch/issues/1791)).<br/>
 Il convient alors d'utiliser :
-```js
-fetch(url, {
-    body: JSON.stringify({}),
-    headers: {
-        "Content-Type": "application/json"
-    }
-});
-```
+
+
+<vshs-playground name="echo (json)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (json)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 #### Lire une réponse
 
@@ -193,7 +194,11 @@ fetch(url, {
 - `.ok` : indique si la réponse représente un succès ;
 - `.status` : le code de status HTTP ;
 - `.statusText` : un message décrivant le code de status HTTP ;
-- `.headers` : les en-têtes de la réponse HTTP ;
+- `.headers` : les en-têtes de la réponse HTTP.
+
+<vshs-playground name="fetch (read)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (read)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 #### EventSource
 
@@ -222,6 +227,52 @@ Les [`WebSocket`](https://developer.mozilla.org/fr/docs/Web/API/WebSocket) perme
 ⚠ Vous devez attendre que la connexion soit ouverte avant d'envoyer des données (i.e. attendre l'événement `open`).
 
 💡 Progressivement, les WebSockets ont vocation à être remplacés par l'API [`WebTransport`](https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API). Cependant, comme pour les flux, il s'agit d'une API bas niveau.
+
+
+aaaaaaaaaaaaa\
+<c>fetch(<d><e>$URL</e></d><d>[, <e>$RequestInit</e>]</d>)</c>\
+bbbbbbbbbbbbb
+
+<style>
+c {
+    padding:0 .5rem;
+    margin: 0 .2rem;
+    white-space: nowrap;
+    background: #F1F1F1;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    color:black;
+
+    & > d {
+
+        padding: 0 .5rem;
+        margin: 0 .2rem;
+        white-space: nowrap;
+        background: lightblue;
+        font-style: italic;
+        border: 1px dashed blue;
+        color: gray;
+        border-radius: 4px;
+
+        & e {
+            color: #ff8c00;
+            font-weight: bold;
+            font-style: normal;
+        }
+    }
+}
+</style>
+
+
+<script type="c-js">
+    const a = 2+2;
+
+    console.log("Hello World"<h>[, $a]</h>);
+</script>
+
+aaaaa\
+cc <script type="c-js">const a = 2+2<h>[, $a]</h>;</script> cc\
+bbbbbb
 
 </main>
     </body>

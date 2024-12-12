@@ -125,6 +125,10 @@ Hello
 <h3 id="via-javascriptbrython">Via JavaScript/Brython</h3>
 <h4 id="envoyer-une-requête-avec-fetch">Envoyer une requête avec fetch</h4>
 <p>La fonction asynchrone <js-code>fetch(<var>$URL</var>[, <var>$RequestInit</var>])</js-code> envoie une requête HTTP et retourne un <code>Response</code>.</p>
+<vshs-playground name="echo (string)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (string)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
 <p><code>RequestInit</code> peut contenir les champs suivants :</p>
 <ul>
 <li><code>method</code> : la méthode HTTP à utiliser (e.g. <code>GET</code>) ;</li>
@@ -133,24 +137,22 @@ Hello
 <li><code>cache</code> : la politique de cache à utiliser ;</li>
 </ul>
 <p>💡 Vous pouvez aussi construire un <code>Request</code> et le donner en paramètre de <code>fetch()</code>:</p>
-<pre><code class="language-js">const request = new Request(&quot;/foo&quot;, {
-    method: &quot;POST&quot;,
-    body  : &quot;faa&quot;
-});
+<vshs-playground name="fetch (request)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (request)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
-fetch(request);
-</code></pre>
 <p>💡 La construction d&#39;un <code>Request</code> est similaire par bien des aspects à la construction d&#39;un <code>Response</code>.</p>
 <p>💡 Pour répéter une requête, vous pouvez construire un <js-code>Request</js-code> que vous clonerez avant de le transmettre à <code>fetch()</code>.</p>
+<vshs-playground name="fetch (clone)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (clone)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
 <p>⚠ Contrairement à <code>Response</code>, <code>Request</code> ne dispose pas pour le moment d&#39;une méthode statique <code>.json()</code> (cf <a href="https://github.com/whatwg/fetch/issues/1791">issue</a>).<br/>
 Il convient alors d&#39;utiliser :</p>
-<pre><code class="language-js">fetch(url, {
-    body: JSON.stringify({}),
-    headers: {
-        &quot;Content-Type&quot;: &quot;application/json&quot;
-    }
-});
-</code></pre>
+<vshs-playground name="echo (json)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=echo (json)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
 <h4 id="lire-une-réponse">Lire une réponse</h4>
 <p><code>await fetch()</code> retourne un <code>Response</code> représentant la réponse du serveur.</p>
 <p>💡 La lecture d&#39;un <code>Response</code> est similaire par bien des aspects à la lecture d&#39;un <code>Request</code>.</p>
@@ -159,8 +161,12 @@ Il convient alors d&#39;utiliser :</p>
 <li><code>.ok</code> : indique si la réponse représente un succès ;</li>
 <li><code>.status</code> : le code de status HTTP ;</li>
 <li><code>.statusText</code> : un message décrivant le code de status HTTP ;</li>
-<li><code>.headers</code> : les en-têtes de la réponse HTTP ;</li>
+<li><code>.headers</code> : les en-têtes de la réponse HTTP.</li>
 </ul>
+<vshs-playground name="fetch (read)" show="request.code,output">
+</vshs-playground>
+<div style="text-align:right"><a href="../../../playground/?example=fetch (read)"><i>Tester l'exemple dans le bac à sable</i></a></div>
+
 <h4 id="eventsource">EventSource</h4>
 <p>Les <a href="https://developer.mozilla.org/fr/docs/Web/API/Server-sent_events">Server-Sent Events</a> permettent de recevoir progressivement des données du serveur.</p>
 <p>On peut alors utiliser <code>new EventSource(url)</code> afin de lire les événements envoyés par le serveur :</p>
@@ -182,6 +188,45 @@ Il convient alors d&#39;utiliser :</p>
 
 <p>⚠ Vous devez attendre que la connexion soit ouverte avant d&#39;envoyer des données (i.e. attendre l&#39;événement <code>open</code>).</p>
 <p>💡 Progressivement, les WebSockets ont vocation à être remplacés par l&#39;API <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API"><code>WebTransport</code></a>. Cependant, comme pour les flux, il s&#39;agit d&#39;une API bas niveau.</p>
+<p>aaaaaaaaaaaaa<br><c>fetch(<d><e>$URL</e></d><d>[, <e>$RequestInit</e>]</d>)</c><br>bbbbbbbbbbbbb</p>
+<style>
+c {
+    padding:0 .5rem;
+    margin: 0 .2rem;
+    white-space: nowrap;
+    background: #F1F1F1;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    color:black;
+
+    & > d {
+
+        padding: 0 .5rem;
+        margin: 0 .2rem;
+        white-space: nowrap;
+        background: lightblue;
+        font-style: italic;
+        border: 1px dashed blue;
+        color: gray;
+        border-radius: 4px;
+
+        & e {
+            color: #ff8c00;
+            font-weight: bold;
+            font-style: normal;
+        }
+    }
+}
+</style>
+
+
+<script type="c-js">
+    const a = 2+2;
+
+    console.log("Hello World"<h>[, $a]</h>);
+</script>
+
+<p>aaaaa<br>cc <script type="c-js">const a = 2+2<h>[, $a]</h>;</script> cc<br>bbbbbb</p>
 </main>
     </body>
 </html>

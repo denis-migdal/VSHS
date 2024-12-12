@@ -32,6 +32,9 @@ const examples = [
     "response (SSE Helper)",
     "response (WebSocket)",
     "response (headers)",
+    "fetch (request)",
+    "fetch (clone)",
+    "fetch (read)",
     "fetch (SSE)"
 ];
 

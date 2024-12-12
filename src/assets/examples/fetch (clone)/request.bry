@@ -1,0 +1,15 @@
+from browser import self
+
+req = self.Request.new("/fetch (request)", {
+    "method" : "POST",
+    "body"   : "foo"
+});
+
+async def main():
+    
+    r = await self.fetch(req.clone())
+
+    self.print_response(r)
+
+from browser import aio
+aio.run(main())

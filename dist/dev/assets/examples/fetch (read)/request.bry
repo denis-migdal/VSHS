@@ -1,0 +1,20 @@
+from browser import self
+
+async def main():
+    r = await self.fetch("/fetch (read)")
+    
+    status     = r.status;
+    statusText = r.statusText;
+    type       = r.headers.get("Content-Type")
+
+    content    = await r.text()
+
+    body = self.document.body
+    
+    body.textContent = (f"{status}: {statusText}\n"
+                        f"{type}\n"
+                        f"\n"
+                        f"{content}\n")
+
+from browser import aio
+aio.run(main())
