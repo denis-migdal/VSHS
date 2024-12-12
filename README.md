@@ -4,7 +4,7 @@
   <p>Build very easily an HTTP server in TS, JS, or Brython.</p>
 </div>
 
-Documentation (fr) : https://denis-migdal.github.io/VSHS/dist/dev/pages/docs/fr/
+Documentation (fr) : https://denis-migdal.github.io/VSHS/dist/dev/pages/fr/docs/
 
 ## Build the documentation
 
