@@ -1,8 +1,7 @@
-- fr:🇫🇷
-    - docs:Documentation
-        - server:Démarrer et requêter le serveur HTTP
-        - response:Construire une réponse HTTP (à retourner)
-        - request:Lire une requête HTTP reçue
-        - routes:Définir une route
-- en:🇬🇧
+- fr/docs:🇫🇷
+    - server:Démarrer et requêter le serveur HTTP
+    - response:Construire une réponse HTTP (à retourner)
+    - request:Lire une requête HTTP reçue
+    - routes:Définir une route
+- en/docs:🇬🇧
 - playground:Playground
