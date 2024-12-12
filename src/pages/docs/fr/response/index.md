@@ -18,26 +18,26 @@
 
 # Construire une réponse HTTP (à retourner)
 
-Pour répondre à une requête HTTP, il suffit de retourner une instance de [`Response`](https://developer.mozilla.org/fr/docs/Web/API/Response).
+Pour répondre à une requête HTTP, il suffit de retourner une instance de [<script type="c-js">Response</script>](https://developer.mozilla.org/fr/docs/Web/API/Response).
 
 ## Indiquer le contenu de la réponse
 
-En général vous souhaiterez envoyer des données au format JSON grâce à la **méthode statique** `Response.json()` :
+En général vous souhaiterez envoyer des données au format JSON grâce à la **méthode statique** <script type="c-js">Response.json()</script> :
 
 <vshs-playground name="response (json)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (json)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
-Vous pouvez aussi utiliser le **constructeur** de `Response` afin d'envoyer différent types de données (cliquez pour afficher) :
+Vous pouvez aussi utiliser le **constructeur** de <script type="c-js">Response</script> afin d'envoyer différent types de données (cliquez pour afficher) :
 
 <details>
-    <summary><b>Texte</b> : avec <js-code>string</js-code>.</summary>
+    <summary><b>Texte</b> : avec <script type="c-js">string</script>.</summary>
     <vshs-playground name="response (string)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (string)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 </details>
 <details>
-    <summary><b>Paires clefs-valeurs</b> : avec <a href="https://developer.mozilla.org/fr/docs/Web/API/URLSearchParams"><js-code>URLSearchParams</js-code></a> ou <a href="https://developer.mozilla.org/fr/docs/Web/API/FormData"><js-code>FormData</js-code></a>.</summary>
+    <summary><b>Paires clefs-valeurs</b> : avec <a href="https://developer.mozilla.org/fr/docs/Web/API/URLSearchParams"><script type="c-js">URLSearchParams</script></a> ou <a href="https://developer.mozilla.org/fr/docs/Web/API/FormData"><script type="c-js">FormData</script></a>.</summary>
     <vshs-playground name="response (URLSearchParams)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (URLSearchParams)"><i>Tester l'exemple dans le bac à sable</i></a></div>
@@ -47,23 +47,23 @@ Vous pouvez aussi utiliser le **constructeur** de `Response` afin d'envoyer diff
     💡 Préférez les <js-code>URLFormParams</js-code> aux <js-code>FormData</js-code>, le format de ces derniers changeant en fonction de la plateforme utilisée.
 </details>
 <details>
-    <summary><b>Données binaires</b> : usuellement avec <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array"><js-code>Uint8Array</js-code></a>, mais aussi <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer"><js-code>ArrayBuffer</js-code></a>, <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/TypedArray"><js-code>TypedArray</js-code></a>, ou <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/DataView"><js-code>DataView</js-code></a>.</summary>
+    <summary><b>Données binaires</b> : usuellement avec <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array"><script type="c-js">Uint8Array</script></a>, mais aussi <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer"><script type="c-js">ArrayBuffer</script></a>, <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/TypedArray"><script type="c-js">TypedArray</script></a>, ou <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/DataView"><script type="c-js">DataView</script></a>.</summary>
     <vshs-playground name="response (Uint8Array)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (Uint8Array)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 </details>
 <details>
-    <summary><b>Fichiers</b> : avec <a href="https://developer.mozilla.org/fr/docs/Web/API/Blob"><js-code>Blob</js-code></a> ou <a href="https://developer.mozilla.org/fr/docs/Web/API/File"><js-code>File</js-code></a>.</summary>
+    <summary><b>Fichiers</b> : avec <a href="https://developer.mozilla.org/fr/docs/Web/API/Blob"><script type="c-js">Blob</script></a> ou <a href="https://developer.mozilla.org/fr/docs/Web/API/File"><script type="c-js">File</script></a>.</summary>
     <vshs-playground name="response (Blob)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (Blob)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 </details>
 <details>
-    <summary><b>Flux</b> : avec <a href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream"><js-code>ReadableStream</js-code></a>.</summary>
+    <summary><b>Flux</b> : avec <a href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream"><script type="c-js">ReadableStream</script></a>.</summary>
     Cf <a href="#flux-et-server-sent-events">Flux et Server-Sent Events</a>.
 </details>
 
-💡 Si vous ne retournez aucun <js-code>Response</js-code>, VSHS en retournera un automatiquement :
+💡 Si vous ne retournez aucun <script type="c-js">Response</script>, VSHS en retournera un automatiquement :
 
 <vshs-playground name="response (none)" show="index.code,output">
 </vshs-playground>
@@ -78,39 +78,39 @@ Vous pouvez aussi utiliser le **constructeur** de `Response` afin d'envoyer diff
 
 ### Codes de status HTTP
 
-Lors de la construction d'un `Response`, il est possible d'indiquer un code de status HTTP ainsi qu'un texte descriptif :
+Lors de la construction d'un <script type="c-js">Response</script>, il est possible d'indiquer un code de status HTTP ainsi qu'un texte descriptif :
 <vshs-playground name="response (status)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (status)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
-⚠ Actuellement, Deno ne supporte pas les `statusText` personnalisés.
+⚠ Actuellement, Deno ne supporte pas les <script type="c-js">.statusText</script> personnalisés.
 
-💡 Vous pouvez aussi lancer (*throw*) un `Response` qui sera automatiquement retourné :
+💡 Vous pouvez aussi lancer (*throw*) un <script type="c-js">Response</script> qui sera automatiquement retourné :
 <vshs-playground name="response (throw response)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (throw response)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 ### Erreurs et Exceptions
 
-Par défaut, les exceptions/erreurs lancées qui ne sont pas des `Response` sont convertis en une `Response` avec un status 500 et un corps contenant le message d'erreur (statusText n'étant pas supporté par Deno) :
+Par défaut, les exceptions/erreurs lancées qui ne sont pas des <script type="c-js">Response</script> sont convertis en une <script type="c-js">Response</script> avec un status <script type="c-js">500</script> et un corps contenant le message d'erreur (<script type="c-js">.statusText</script> n'étant pas supporté par Deno) :
 <vshs-playground name="response (error)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (error)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 ### Redirections
 
-💡 Vous pouvez effectuer une redirection grâce à la **méthode statique** `Response.redirect()` :
+💡 Vous pouvez effectuer une redirection grâce à la **méthode statique** <script type="c-js">Response.redirect(<h>$URL</h><h>[, $HTTP_CODE]</h>)</script> :
 <vshs-playground name="response (redirect)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (redirect)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
 Son premier paramètre est l'URL vers laquelle rediriger, et son second paramètre (facultatif) le code de status HTTP :
-- `307` : redirection temporaire ;
-- `308` : redirection permanente.
+- <script type="c-js">307</script> : redirection temporaire ;
+- <script type="c-js">308</script> : redirection permanente.
 
 ## En-tête
 
-Vous pouvez préciser des en-têtes à inclure à la réponse HTTP via une instance [`Headers`](https://developer.mozilla.org/fr/docs/Web/API/Headers), ou via un tableau associatif :
+Vous pouvez préciser des en-têtes à inclure à la réponse HTTP via une instance [<script type="c-js">Headers</script>](https://developer.mozilla.org/fr/docs/Web/API/Headers), ou via un tableau associatif :
 
 <vshs-playground name="response (headers)" show="index.code,output">
 </vshs-playground>
@@ -120,9 +120,9 @@ Vous pouvez préciser des en-têtes à inclure à la réponse HTTP via une insta
 ## Flux et Server-Sent Events
 
 Il est aussi possible de retourner des flux grâce à l'<a href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API">API Streams</a>. Elle permet des opérations de bas niveau sur les flux :
-- l'encodage/décodage d'un flux avec [`TextEncoderStream`](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoderStream)/[`TextDecoderStream`](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoderStream).
-- la compression/décompression d'un flux avec [`CompressionStream`](https://developer.mozilla.org/en-US/docs/Web/API/CompressionStream)/[`DecompressionStream`](https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream).
-- ainsi que des opérations arbitraires via [`TransformStream`](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream).
+- l'encodage/décodage d'un flux avec [<script type="c-js">TextEncoderStream</script>](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoderStream)/[<script type="c-js">TextDecoderStream</script>](https://developer.mozilla.org/en-US/docs/Web/API/TextDecoderStream).
+- la compression/décompression d'un flux avec [<script type="c-js">CompressionStream</script>](https://developer.mozilla.org/en-US/docs/Web/API/CompressionStream)/[<script type="c-js">DecompressionStream</script>](https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream).
+- ainsi que des opérations arbitraires via [<script type="c-js">TransformStream</script>](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream).
 
 <details>
     <summary>Cliquez ici pour afficher un exemple de flux.</summary>
@@ -131,7 +131,7 @@ Il est aussi possible de retourner des flux grâce à l'<a href="https://develop
     <div style="text-align:right"><a href="../../../playground/?example=response (stream)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 </details>
 
-💡 Pour des opérations de haut niveau, il convient d'utiliser des designs patterns décorateurs sur `writable.getWriter()` et `readable.getReader()` :
+💡 Pour des opérations de haut niveau, il convient d'utiliser des designs patterns décorateurs sur <script type="c-js">writable.getWriter()</script> et <script type="c-js">readable.getReader()</script> :
 
 <details>
     <summary>Cliquez ici pour afficher un exemple d'implémentation de Server-Sent Events.</summary>
@@ -145,24 +145,24 @@ Il est aussi possible de retourner des flux grâce à l'<a href="https://develop
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (SSE Helper)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
-`SSEResponse` prend en paramètre :
-- un callback appelé avec `writer` et `..args` en paramètres ;
-- (facultatif) un `ResponseInit` permettant de configurer le `Response`;
-- (facultatif) une liste d'arguments `...args` transmis au callback.
+<script type="c-js">VSHS.SSEResponse(<h>$CALLBACK</h><h>[, $ResponseInit[, ...$ARGS]]</h>)</script> prend en paramètre :
+- un callback <script type="c-js">(writer<h>[, ...$ARGS]</h>) => void</script> ;
+- (facultatif) un <script type="c-js">ResponseInit</script> permettant de configurer le <script type="c-js">Response</script> renvoyé ;
+- (facultatif) une liste d'arguments <script type="c-js"><h>...$ARGS</h></script> transmis au callback.
 
 ## Websockets
 
-Les [`WebSocket`](https://developer.mozilla.org/fr/docs/Web/API/WebSocket) permettent des communications bidirectionnelles asynchrones entre le navigateur et le serveur :
-- `send(data)` permet d'envoyer des données ;
-- `addEventListener('message', ({data}) => {})` permet d'écouter les données reçues. 
+Les [<script type="c-js">WebSocket</script>](https://developer.mozilla.org/fr/docs/Web/API/WebSocket) permettent des communications bidirectionnelles asynchrones entre le navigateur et le serveur :
+- <script type="c-js">send(<h>$DATA</h>)</script> permet d'envoyer des données ;
+- <script type="c-js">addEventListener('message', <h>({data}) => {}</h>)</script> permet d'écouter les données reçues. 
 
 <vshs-playground name="response (WebSocket)" show="index.code,output">
 </vshs-playground>
 <div style="text-align:right"><a href="../../../playground/?example=response (WebSocket)"><i>Tester l'exemple dans le bac à sable</i></a></div>
 
-⚠ Vous devez attendre que la connexion soit ouverte avant d'envoyer des données (i.e. attendre l'événement `open`).
+⚠ Vous devez attendre que la connexion soit ouverte avant d'envoyer des données (i.e. attendre l'événement <script type="c-js">open</script>).
 
-💡 Progressivement, les WebSockets ont vocation à être remplacés par l'API [`WebTransport`](https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API). Cependant, comme pour les flux, il s'agit d'une API bas niveau.
+💡 Progressivement, les WebSockets ont vocation à être remplacés par l'API [<script type="c-js">WebTransport</script>](https://developer.mozilla.org/en-US/docs/Web/API/WebTransport_API). Cependant, comme pour les flux, il s'agit d'une API bas niveau.
 
 </main>
     </body>

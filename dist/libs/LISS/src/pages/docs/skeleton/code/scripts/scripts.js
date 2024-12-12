@@ -17,7 +17,7 @@ export class Scripts extends LISS({
             const indent = code.slice(1, offset);
             code = code.replaceAll("\n" + indent, "\n");
             const end = code.lastIndexOf('\n');
-            code = code.slice(1, end - 1);
+            code = code.slice(1, end);
         }
         // TODO: get position then reinject ?
         const replaced = [];
