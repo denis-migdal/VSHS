@@ -20,18 +20,17 @@
 
 ## Paramètres de routes
 
-Il est fréquent de traiter un ensemble d'URL suivant le même format (e.g. <js-code>/produits/<var>$ID</var></js-code> ) par le même *request handler* :
+Il est fréquent de traiter un ensemble d'URL suivant le même format (e.g. <script type="c-text">/produits/<h>$ID</h></script>) par le même *request handler* :
 - `/produits/1` ;
 - `/produits/2` ;
 - `/produits/3` ;
 - etc.
 
-<js-code><var>$ID</var></js-code> est alors un **paramètre de route** et sera indiqué par son nom entre accolades, i.e. <js-code><var>{ID}</var></js-code>.<br/>
-Il suffit ainsi de créer un fichier <js-code>/produits/{ID}/GET.ts</js-code> pour définir un *request handler* associé à cet ensemble d'URL.
+<script type="c-text"><h>$ID</h></script> est alors un <b>paramètre de route</b> et sera indiqué par son nom entre accolades, i.e. <script type="c-text">{ID}</script>.<br/>Il suffit ainsi de créer un fichier <script type="c-text">/produits/{ID}/GET.ts</script> pour définir un <i>request handler</i> associé à cet ensemble d'URL.
 
 Le second paramètre des requests handlers contient, entres autres :
-- `path` : la route traitée ;
-- `vars` : les paramètres de routes.
+- <script type="c-js">.path</script> : la route traitée ;
+- <script type="c-js">.vars</script> : les paramètres de routes.
 
 <vshs-playground name="echo (vars)" show="index.code,output">
 </vshs-playground>
@@ -39,13 +38,13 @@ Le second paramètre des requests handlers contient, entres autres :
 
 ## Route par défaut
 
-En cas d'erreur non-traitée, ou de route non-trouvée, la requête sera redirigée vers la **route par défaut** `/default/GET`.
+En cas d'erreur non-traitée, ou de route non-trouvée, la requête sera redirigée vers la **route par défaut** <script type="c-text">/default/GET</script>.
 
-💡 Vous pouvez ainsi définir un *request handler* par défaut via le fichier `$ROUTES/default/GET.*`.
+💡 Vous pouvez ainsi définir un *request handler* par défaut via le fichier <script type="c-text"><h>$ROUTES</h>/default/GET.<h>$EXT</h></script>.
 
 En cas d'erreurs, ce *request handler* sera appelé avec des propriétés additionnelles pour son second argument :
-- `.error` : l'erreur reçue.
-- `.route` : le second argument du premier *request handler* appelé.
+- <script type="c-js">.error</script> : l'erreur reçue.
+- <script type="c-js">.route</script> : le second argument du premier *request handler* appelé.
 
 💡 Vous pouvez redéfinir la route par défaut via les options suivantes :
 
@@ -68,9 +67,9 @@ th,td {
         <tr><th></th><th>CLI</th><th>TS</th></tr>
     </thead>
     <tbody>
-        <tr><th>Tous</th><td><js-code>--default</js-code></td><td><js-code>default</js-code></td></tr>
-        <tr><th>Route non trouvée</th><td><js-code>--not_found</js-code></td><td><js-code>not_found</js-code></td></tr>
-        <tr><th>Erreur non-capturée</th><td><js-code>--internal_error</js-code></td><td><js-code>internal_error</js-code></td></tr>
+        <tr><th>Tous</th><td><script type="c-shell">--default</script></td><td><script type="c-js">.default</script></td></tr>
+        <tr><th>Route non trouvée</th><td><script type="c-shell">--not_found</script></td><td><script type="c-js">.not_found</script></td></tr>
+        <tr><th>Erreur non-capturée</th><td><script type="c-shell">--internal_error</script></td><td><script type="c-js">.internal_error</script></td></tr>
     </tbody>
 </table>
 
@@ -79,18 +78,18 @@ th,td {
 Les assets sont des fichiers statiques lus par le serveur puis renvoyés comme réponse.
 
 VSHS offre quelques helpers pour cela :
-- `fetchAsset(path)` : retourne un `ReadableStream` sur le fichier (lance une exception si n'existe pas).
-- `getMime(path)` : retourne le type-mime à partir du nom de fichier.
+- <script type="c-js">VSHS.fetchAsset(<h>$PATH</h>)</script> : retourne un <script type="c-js">ReadableStream</script> sur le fichier (lance une exception si n'existe pas).
+- <script type="c-js">VSHS.getMime(<h>$PATH</h>)</script> : retourne le type-mime à partir du nom de fichier.
 
-Pa défault, si une route n'est pas trouvée ( et si le chemin commence par la valeur indiquée par `assets_prefix`), VSHS servira, s'il existe, le fichier correspond.
+Pa défault, si une route n'est pas trouvée (et si le chemin commence par la valeur indiquée par <script type="c-js">.assets_prefix</script>), VSHS servira, s'il existe, le fichier correspondant.
 
 <table>
     <thead>
         <tr><th></th><th>CLI</th><th>TS</th></tr>
     </thead>
     <tbody>
-        <tr><th>Dossier contenant les assets</th><td><js-code>--assets</js-code></td><td><js-code>assets</js-code></td></tr>
-        <tr><th>Préfixe du chemin</th><td><js-code>--assets_prefix</js-code></td><td><js-code>assets_prefix</js-code></td></tr>
+        <tr><th>Dossier contenant les assets</th><td><script type="c-shell">--assets</script></td><td><script type="c-js">.assets</script></td></tr>
+        <tr><th>Préfixe du chemin</th><td><script type="c-shell">--assets_prefix</script></td><td><script type="c-js">.assets_prefix</script></td></tr>
     </tbody>
 </table>
 
