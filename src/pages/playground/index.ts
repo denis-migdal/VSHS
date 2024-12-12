@@ -89,6 +89,4 @@ selector.addEventListener('change', () => {
 
 const searchParams = new URLSearchParams(location.search);
 const example = searchParams.get('example');
-if( example !== null) {
-    setExample(example);
-}
+setExample(example ?? selector.value);

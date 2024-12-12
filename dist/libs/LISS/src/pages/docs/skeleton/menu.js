@@ -16,7 +16,7 @@ import { rootdir } from "./code/playground-area/PlaygroundArea";
 function buildPagesMenu(content) {
     const root = {
         text: "",
-        href: "/dist/dev/pages/" + rootdir,
+        href: rootdir + "/dist/dev/pages/",
         level: 1,
         parent: null,
         children: []
@@ -144,9 +144,12 @@ function updatePageMenu() {
     const html = generateMenuHTML(last ?? menu);
     menu_page.replaceChildren(...html);
 }
-const menu = buildPageMenu();
-window.addEventListener('scroll', updatePageMenu);
-updatePageMenu();
+const hasH1 = document.body.querySelector("h1") !== null;
+if (hasH1) {
+    buildPageMenu();
+    window.addEventListener('scroll', updatePageMenu);
+    updatePageMenu();
+}
 const cur_page = searchCurPagesHeader(buildPagesMenu(content));
 menu_pages.replaceChildren(...generateMenuHTML(cur_page));
 //# sourceMappingURL=menu.js.map
