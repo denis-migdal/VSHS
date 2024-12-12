@@ -3,6 +3,7 @@ const menu_area = document.createElement('div');
 const menu_pages = document.createElement('div');
 const menu_page = document.createElement('div');
 menu_page.classList.add('menu_page');
+menu_pages.classList.add('menu_pages');
 menu_area.classList.add('menu_area');
 // Build page menu
 // Update page menu
@@ -14,7 +15,8 @@ import content from "!!raw-loader!/content.txt";
 import { rootdir } from "./code/playground-area/PlaygroundArea";
 function buildPagesMenu(content) {
     const root = {
-        target: "/",
+        text: "",
+        href: "/dist/dev/pages/" + rootdir,
         level: 1,
         parent: null,
         children: []
@@ -30,7 +32,7 @@ function buildPagesMenu(content) {
         const parent = current[level - 1];
         const node = {
             text,
-            target,
+            href: parent.href + target + "/",
             level,
             parent,
             children: []
@@ -41,8 +43,11 @@ function buildPagesMenu(content) {
     return root;
 }
 function buildPageMenu(parent = null) {
+    const h1 = document.querySelector('h1');
     const root = {
-        target: document.querySelector('h1'),
+        html: h1,
+        href: `#${h1.id}`,
+        text: getTitlePrefix(1, 1) + h1.textContent, //TODO: get...
         level: 1,
         parent: null,
         children: []
@@ -54,7 +59,9 @@ function buildPageMenu(parent = null) {
         while (level <= curpos.level)
             curpos = curpos.parent;
         const elem = {
-            target: title,
+            html: title,
+            href: `#${title.id}`,
+            text: getTitlePrefix(level, curpos.children.length) + title.textContent,
             level,
             children: [],
             parent: curpos
@@ -67,60 +74,56 @@ function buildPageMenu(parent = null) {
 function searchCurPageHeader(htree, position) {
     const headers = htree.children;
     for (let i = headers.length - 1; i >= 0; --i) {
-        if (headers[i].target.offsetTop <= position + 2.5 * 14 + 5)
+        if (headers[i].html.offsetTop <= position + 2.5 * 14 + 5)
             return searchCurPageHeader(headers[i], position) ?? headers[i];
     }
     return null;
 }
 function searchCurPagesHeader(htree) {
-    console.warn(rootdir, window.location.pathname);
-    return null;
+    const curpage = window.location.pathname;
+    let cur = htree;
+    while (true) {
+        const find = cur.children.find((node) => curpage.startsWith(node.href));
+        if (find === undefined)
+            return cur;
+        cur = find;
+    }
 }
-const pages = buildPagesMenu(content); //TODO
-searchCurPagesHeader(pages);
 const hid = [
     [],
     ["I", "II", "III", "IV"],
     ["1", "2", "3", "5", "6", "7", "8", "9"],
     ["a", "b", "c", "d", "e", "f", "g", "h"],
 ];
-function getTitlePrefix(s) {
-    if (s.level >= hid.length)
+function getTitlePrefix(level, idx) {
+    if (level >= hid.length)
         return "";
-    let idx = 1; //TODO...
-    if (s.parent !== null)
-        idx = s.parent.children.indexOf(s);
-    const num = hid[s.level][idx];
+    const num = hid[level][idx];
     return `${num}. `;
 }
 function buildMenu(nodes) {
     const menu = document.createElement("div");
     menu.classList.add("menu");
-    menu.append(...nodes.map((s, idx) => {
+    menu.append(...nodes.map((s) => {
         const item = document.createElement("a");
-        item.textContent = `${getTitlePrefix(s)}${s.target.textContent}`;
-        item.setAttribute("href", `#${s.target.id}`);
+        item.textContent = s.text;
+        item.setAttribute("href", s.href);
         return item;
     }));
     return menu;
 }
-function updatePageMenu() {
-    //TODO: scale...
-    let last = searchCurPageHeader(menu, document.documentElement.scrollTop);
+function generateMenuHTML(target) {
     let headers = [];
-    let cursor = last;
-    if (last === null)
-        cursor = last = menu;
+    let cursor = target;
     while (cursor !== null) {
         headers.push(cursor);
         cursor = cursor.parent;
     }
-    const html = headers.reverse().map((hnode, i) => {
-        const h = hnode.target;
+    const html = headers.reverse().map((hnode) => {
         const h_html = document.createElement("span");
         const link = document.createElement("a");
-        link.textContent = `${getTitlePrefix(hnode)}${h.textContent}`;
-        link.setAttribute('href', `#${h.id}`);
+        link.textContent = hnode.text;
+        link.setAttribute('href', hnode.href);
         h_html.append(link);
         if (hnode.parent !== null) {
             const menu = buildMenu(hnode.parent.children);
@@ -128,75 +131,22 @@ function updatePageMenu() {
         }
         return h_html;
     });
-    if (last !== null && last.children.length !== 0) {
+    if (target.children.length !== 0) {
         const empty = document.createElement("span");
-        empty.append(buildMenu(last.children));
+        empty.append(buildMenu(target.children));
         html.push(empty);
     }
-    /*
-    function make_page_href(pathprefix: string, path: string, desc: any) {
-
-        // h4ck...
-        if( path[0] === "/" )
-            throw new Error('not implemented');
-            //return `${root_path.slice(0,-6)}/${path}`;
-
-        let href = `${pathprefix}${path}/`;
-
-        while(desc.children?.length) {
-            desc = desc.children[0];
-            href += `${desc.path ?? desc}/`;
-        }
-
-        return href;
-    }
-
-    /*
-    function make_page_menu(pathprefix: string, path: string, pages: any) {
-        const desc = pages.find( (page: any) => page === path || page.path === path )!;
-        
-        const html = document.createElement("span");
-        {
-            const link = document.createElement("a");
-            link.textContent = desc.sname ?? desc.name ?? desc;
-            link.setAttribute('href', make_page_href(pathprefix, path, desc) );
-    
-            const menu = document.createElement("div");
-            menu.classList.add("menu");
-    
-            menu.append( ... pages.map( (page:any) => {
-                const item = document.createElement("a");
-                item.textContent= page.name ?? page;
-
-                item.setAttribute("href", make_page_href(pathprefix, page.path??page, page) );
-                return item;
-            }) );
-    
-            html.append(link, menu);
-        }
-
-        return html;
-    }
-    let curpage = window.location.pathname.slice(root_path.length).split('/');
-
-    const module_html = make_page_menu(root_path, curpage[0], pages);
-
-    const desc = pages.find( (page: any) => page.path === curpage[0] )!;
-    const type_html   = make_page_menu(root_path + curpage[0] + "/", curpage[1], desc.children);
-
-    const desc_type = desc.children.find( (page: any) => (page?.path ?? page) === curpage[1] )!;
-    if( typeof desc_type !== "string") {
-        // title num
-        const desc2_idx = desc_type.children.findIndex( (page: any) => page?.path ?? page === curpage[2] )!;
-        document.body.style.setProperty("--header_start_id", `${desc2_idx}`);
-        // menu
-        const session_html   = make_page_menu(root_path + curpage[0] + "/"+ curpage[1] + "/", curpage[2], desc_type.children);
-        html[0] = session_html;
-    }*/
-    // module_html, type_html,
+    return html;
+}
+function updatePageMenu() {
+    //TODO: scale...
+    let last = searchCurPageHeader(menu, document.documentElement.scrollTop);
+    const html = generateMenuHTML(last ?? menu);
     menu_page.replaceChildren(...html);
 }
 const menu = buildPageMenu();
 window.addEventListener('scroll', updatePageMenu);
 updatePageMenu();
+const cur_page = searchCurPagesHeader(buildPagesMenu(content));
+menu_pages.replaceChildren(...generateMenuHTML(cur_page));
 //# sourceMappingURL=menu.js.map
