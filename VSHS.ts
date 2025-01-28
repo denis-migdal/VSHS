@@ -197,7 +197,9 @@ async function load_brython() {
 
 	//brython = await (await fetch( "https://cdnjs.cloudflare.com/ajax/libs/brython/3.13.0/brython.min.js" )).text();
 	const file = "brython(1)";
-	const dir = import.meta.url.slice(6, import.meta.url.lastIndexOf('/') );
+	const base_url = decodeURI(import.meta.url);
+	const dir = base_url.slice(7, base_url.lastIndexOf('/') );
+	console.log("--", dir);
 	const brython = await Deno.readTextFile(dir + `/${file}.js`);
 
 	// @ts-ignore

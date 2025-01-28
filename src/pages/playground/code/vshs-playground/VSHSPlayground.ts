@@ -1,5 +1,5 @@
 import LISS from "../../../../../libs/LISS/src/";
-import PlaygroundArea, { ASSETS, rootdir } from "../../../../../libs/LISS/src/pages/docs/skeleton/code/playground-area/PlaygroundArea";
+import PlaygroundArea, { rootdir } from "../../../../../libs/LISS/src/pages/docs/skeleton/code/playground-area/PlaygroundArea";
 
 const resources = [{
         file : 'index.js',
