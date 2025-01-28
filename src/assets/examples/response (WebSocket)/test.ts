@@ -1,4 +1,4 @@
 // @ts-ignore
-import {test} from "VSHS";
+import {test} from "../../../../tests_helper.ts";
 
 //TODO...

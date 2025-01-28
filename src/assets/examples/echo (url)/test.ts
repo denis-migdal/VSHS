@@ -1,5 +1,5 @@
 // @ts-ignore
-import {test} from "VSHS";
+import {test} from "../../../../tests_helper.ts";
 
 test('echo (url)',
      'http://localhost:8080/echo (url)',

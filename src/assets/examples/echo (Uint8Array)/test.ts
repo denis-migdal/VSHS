@@ -1,5 +1,5 @@
 // @ts-ignore
-import {test} from "VSHS";
+import {test} from "../../../../tests_helper.ts";
 
 test('echo (Uint8Array)',
      new Request('http://localhost:8080/echo (Uint8Array)', {
