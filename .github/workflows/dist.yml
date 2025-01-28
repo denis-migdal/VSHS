@@ -1,6 +1,6 @@
 name: Generate dist files
 
-on: [push]
+on: []
 
 jobs:
   gen_dist_files:
