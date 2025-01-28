@@ -458,6 +458,11 @@ async function buildRequestHandler(routes: Routes, {
 
 			route = getRouteHandler(regexes, method, url, use_brython);
 
+			if( route === null ) {
+				const index_url = new URL("./index.html", url.toString() + "/");
+				route = getRouteHandler(regexes, method, index_url, use_brython);
+			}
+
 			if( route !== null) {
 				answer = await route.handler(request, route);
 			} else {
@@ -519,11 +524,13 @@ function getRouteHandler(regexes: (readonly [RegExp, Handler, string, boolean])[
 						url: URL|string,
 						use_brython: boolean|null = null): Route|null {
 
-	let curRoute: string;
-	if( typeof url === "string")
-		curRoute = `${url}/${method}`;
-	else
-		curRoute = `${ decodeURI(url.pathname) }/${method}`;
+	if( typeof url !== "string")
+		url = decodeURI(url.pathname);
+
+	if( url[url.length-1] !== '/')
+		url += '/';
+
+	let curRoute = `${url}${method}`;
 
 	for(let route of regexes) {
 
