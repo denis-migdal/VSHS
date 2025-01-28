@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-all --watch --check --unstable-sloppy-imports
 
-if( "Deno" in globalThis && Deno.args.length ) {
+if( "Deno" in globalThis && import.meta.main && Deno.args.length ) {
 
 	const {parseArgs} = await import("jsr:@std/cli/parse-args");
 
