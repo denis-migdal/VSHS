@@ -1,6 +1,0 @@
-#  /response (json)/GET.bry
-
-from browser import self
-
-async def RequestHandler(request, _):
-    return self.Response.json({"a": 42});

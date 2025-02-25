@@ -1,0 +1,9 @@
+#  /response (Blob)/GET.bry
+
+from browser import self
+
+async def DefaultExport(request, _):
+    file = self.Blob.new(["a,b"], {
+        "type": "text/csv"
+    })
+    return self.Response.new(file);

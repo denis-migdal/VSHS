@@ -1,4 +1,0 @@
-#  /response (error)/GET.bry
-
-async def RequestHandler(request, _):
-    raise Exception(":'(")

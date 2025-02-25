@@ -1,0 +1,10 @@
+#  /response (URLSearchParams)/GET.bry
+
+from browser import self
+
+async def DefaultExport(request, _):
+    params = self.URLSearchParams.new({
+        "a": 42,
+        "b": 1337
+    })
+    return self.Response.new(params);

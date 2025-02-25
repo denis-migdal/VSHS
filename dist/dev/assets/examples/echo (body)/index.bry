@@ -1,8 +1,0 @@
-#  /echo (body)/POST.bry
-
-from browser import self
-
-async def RequestHandler(request, _):
-    return self.Response.new(request.body, {
-        "headers": request.headers
-    })

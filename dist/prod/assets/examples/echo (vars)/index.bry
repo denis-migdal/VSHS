@@ -1,0 +1,6 @@
+#  /echo (vars)/{P}/GET.bry
+
+from browser import self
+
+async def DefaultExport(request, route):
+    return self.Response.json(route.vars)

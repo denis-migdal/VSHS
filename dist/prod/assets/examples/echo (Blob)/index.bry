@@ -1,0 +1,7 @@
+#  /echo (Blob)/POST.bry
+
+from browser import self
+
+async def DefaultExport(request, _):
+    received = await request.blob()
+    return self.Response.new(received)

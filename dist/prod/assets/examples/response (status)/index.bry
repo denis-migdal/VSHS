@@ -1,0 +1,11 @@
+#  /response (status)/GET.bry
+
+from browser import self
+import javascript
+
+null = javascript.NULL
+
+async def DefaultExport(request, _):
+    return self.Response.new(null, {
+        "status"    : 501
+    });

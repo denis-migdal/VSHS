@@ -1,0 +1,6 @@
+#  /index/index.html/GET.bry
+
+from browser import self
+
+async def DefaultExport(r, _):
+    return self.Response.new("ok")

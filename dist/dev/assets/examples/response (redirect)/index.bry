@@ -1,8 +1,0 @@
-#  /response (redirect)/GET.bry
-
-from browser import self
-
-async def RequestHandler(request, _):
-    url    = self.URL.new(request.url)
-    target = url.origin + "/echo (url)"
-    return self.Response.redirect(target)

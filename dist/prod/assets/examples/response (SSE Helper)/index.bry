@@ -1,0 +1,18 @@
+#  /response (SSE Helper)/GET.bry
+
+from browser import self
+
+async def callback(writer, *args):
+
+    def onClose():
+        pass # connexion closed
+    writer.closed["finally"](onClose)
+
+    for i in range(0,3):
+        await writer.sendEvent({"i": i})
+
+    writer.close()
+
+async def DefaultExport(request, _):
+    args = []
+    return self.VSHS.SSEResponse(callback, {}, *args)

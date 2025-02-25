@@ -1,0 +1,2 @@
+export const id=919;export const ids=[919];export const modules={6818:(o,s,t)=>{t.p}};import o from"../../skeleton/index.js";import*as s from"./index.js";o.C(s),o(o.s=6818);
+//# sourceMappingURL=index.js.map

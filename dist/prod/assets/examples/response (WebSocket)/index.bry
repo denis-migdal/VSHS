@@ -1,0 +1,14 @@
+#  /response (WebSocket)/GET.js
+
+from browser import self
+
+async def DefaultExport(request, _):
+
+    w = self.Deno.upgradeWebSocket(request)
+
+    def onMessage(ev):
+        w.socket.send(ev.data)
+
+    w.socket.addEventListener("message", onMessage)
+
+    return w.response

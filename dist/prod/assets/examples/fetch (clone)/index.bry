@@ -1,0 +1,7 @@
+#  /echo (string)/POST.bry
+
+from browser import self
+
+async def DefaultExport(request, _):
+    received = await request.text()
+    return self.Response.new(received)

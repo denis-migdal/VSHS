@@ -1,4 +1,0 @@
-#  /response (none)/GET.bry
-
-async def RequestHandler(request, _):
-    pass

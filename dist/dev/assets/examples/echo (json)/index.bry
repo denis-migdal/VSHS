@@ -1,7 +1,0 @@
-#  /echo (json)/POST.bry
-
-from browser import self
-
-async def RequestHandler(request, _):
-    received = await request.json()
-    return self.Response.json(received)

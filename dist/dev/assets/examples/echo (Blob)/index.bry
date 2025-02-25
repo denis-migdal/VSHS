@@ -1,7 +1,0 @@
-#  /echo (Blob)/POST.bry
-
-from browser import self
-
-async def RequestHandler(request, _):
-    received = await request.blob()
-    return self.Response.new(received)

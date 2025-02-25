@@ -1,0 +1,4 @@
+#  /response (error)/GET.bry
+
+async def DefaultExport(request, _):
+    raise Exception(":'(")

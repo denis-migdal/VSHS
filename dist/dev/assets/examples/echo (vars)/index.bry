@@ -1,6 +1,0 @@
-#  /echo (vars)/{P}/GET.bry
-
-from browser import self
-
-async def RequestHandler(request, route):
-    return self.Response.json(route.vars)

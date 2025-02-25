@@ -1,0 +1,8 @@
+#  /response (clone)/GET.bry
+
+from browser import self
+
+response = self.Response.new("ok");
+
+async def DefaultExport(request, _):
+    return response.clone()

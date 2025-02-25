@@ -1,0 +1,7 @@
+#  /response (Uint8Array)/GET.bry
+
+from browser import self
+
+async def DefaultExport(request, _):
+    bytes = self.Uint8Array.new([72, 101, 108, 108, 111])
+    return self.Response.new(bytes);
