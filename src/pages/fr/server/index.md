@@ -8,7 +8,7 @@
         <link   href="/skeleton/index.css"  rel="stylesheet">
         <script  src="/skeleton/index.js"  type="module"     blocking="render" async></script>
     </head>
-    <body class="hide_h1">
+    <body code-langs="js,bry">
         <main>
 
 # Démarrer et requêter le serveur HTTP

@@ -8,7 +8,7 @@
         <link   href="/skeleton/index.css"  rel="stylesheet">
         <script  src="/skeleton/index.js"  type="module"     blocking="render" async></script>
     </head>
-    <body>
+    <body code-langs="js,bry">
         <main>
 
 # Lire une requête HTTP reçue

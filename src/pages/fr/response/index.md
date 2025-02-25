@@ -9,7 +9,7 @@
         <script  src="/skeleton/index.js"  type="module"     blocking="render" async></script>
     </head>
     <body>
-        <main>
+        <main code-langs="js,bry">
 
 # Construire une réponse HTTP (à retourner)
 
