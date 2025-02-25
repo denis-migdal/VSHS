@@ -10,7 +10,3 @@ Documentation (fr) : https://vshs.migdal.ovh/
 
 - `npm run build`
 - `npm run watch`
-
-## TODO
-
-- move test functions outside of VSHS.ts
