@@ -1,1 +1,1 @@
-{"version":3,"file":"fr/server/index.js","mappings":";;;;;;;;;;;;;;AAAA,iEAAe,qBAAuB,yBAAyB","sources":["webpack://VSHS/./src/pages/fr/server/index.md"],"sourcesContent":["export default __webpack_public_path__ + \"fr/server/index.html\";"],"names":[],"sourceRoot":""}
+{"version":3,"file":"fr/server/index.js","mappings":"gFAAe,G","sources":["webpack://VSHS/./src/pages/fr/server/index.md"],"sourcesContent":["export default __webpack_public_path__ + \"fr/server/index.html\";"],"names":[],"sourceRoot":""}

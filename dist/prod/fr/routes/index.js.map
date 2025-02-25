@@ -1,1 +1,1 @@
-{"version":3,"file":"fr/routes/index.js","mappings":";;;;;;;;;;;;;;AAAA,iEAAe,qBAAuB,yBAAyB","sources":["webpack://VSHS/./src/pages/fr/routes/index.md"],"sourcesContent":["export default __webpack_public_path__ + \"fr/routes/index.html\";"],"names":[],"sourceRoot":""}
+{"version":3,"file":"fr/routes/index.js","mappings":"gFAAe,G","sources":["webpack://VSHS/./src/pages/fr/routes/index.md"],"sourcesContent":["export default __webpack_public_path__ + \"fr/routes/index.html\";"],"names":[],"sourceRoot":""}
