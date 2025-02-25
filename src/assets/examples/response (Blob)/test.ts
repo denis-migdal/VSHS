@@ -1,11 +1,11 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import addTest from "TESTS";
 
-test('Response (Blob)',
-     'http://localhost:8080/response (Blob)',
-     {
-        status: 200,
-        body  : "a,b",
-        mime  : "text/csv"
-     }
+addTest('Response (Blob)',
+         'http://localhost:8080/response (Blob)',
+         {
+            status: 200,
+            body  : "a,b",
+            mime  : "text/csv"
+         }
 );

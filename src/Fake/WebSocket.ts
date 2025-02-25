@@ -12,6 +12,16 @@ export function getFakeWebSocket(use_server: string|null) {
     return WebSocketFake;
 }
 
+declare global {
+    interface Deno {
+        upgradeWebSocket(req: Request): {
+            socket: WebSocketFake,
+            response: Response
+        };
+    }
+}
+
+// @ts-ignore
 globalThis.Deno = {
     upgradeWebSocket: function(request: Request) {
 

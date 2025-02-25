@@ -2,7 +2,7 @@
 
 from browser import self
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     params = self.FormData.new();
     params.set("a", 42);
     params.set("b", 1337);

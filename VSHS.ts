@@ -1,9 +1,11 @@
 #!/usr/bin/env -S deno run --allow-all --watch --check --unstable-sloppy-imports
 
+// @ts-nocheck
+
 // command
 if( "Deno" in globalThis && import.meta.main && Deno.args.length ) {
 
-	const {parseArgs} = await import("jsr:@std/cli/parse-args");
+	const {parseArgs} = await import( /* webpackIgnore: true */ "jsr:@std/cli/parse-args");
 
 	const args = parseArgs(Deno.args)
 
@@ -167,7 +169,7 @@ export const VSHS = {
 let mimelite: any = null;
 async function loadMime() {
 	if( mimelite === null )
-		mimelite = import("jsr:https://deno.land/x/mimetypes@v1.0.0/mod.ts");
+		mimelite = import( /* webpackIgnore: true */ "jsr:https://deno.land/x/mimetypes@v1.0.0/mod.ts");
 	return await mimelite;
 }
 
@@ -254,7 +256,7 @@ async function loadAllRoutesHandlers(routes: string): Promise<Routes> {
 				$B.runPythonSource(\`${code}\`, "_");
 
 				const module = $B.imported["_"];
-				const fct    = $B.pyobj2jsobj(module.RequestHandler);
+				const fct    = $B.pyobj2jsobj(module.DefaultExport);
 
 				const fct2 = async (...args) => {
 					try {
@@ -280,7 +282,7 @@ async function loadAllRoutesHandlers(routes: string): Promise<Routes> {
 
 			const url = URL.createObjectURL( new Blob([code], {type: "text/javascript"}));
 
-			module = await import( url );
+			module = await import( /* webpackIgnore: true */ url );
 
 		} catch(e) {
 			console.error(e);

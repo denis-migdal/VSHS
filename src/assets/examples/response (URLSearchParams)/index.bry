@@ -2,7 +2,7 @@
 
 from browser import self
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     params = self.URLSearchParams.new({
         "a": 42,
         "b": 1337

@@ -2,5 +2,5 @@
 
 from browser import self
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     return self.Response.new("Hello World ;)");

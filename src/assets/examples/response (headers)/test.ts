@@ -1,10 +1,10 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import addTest from "TESTS";
 
-test('Response (headers)',
-     'http://localhost:8080/response (headers)',
-     {
-        status: 200,
-        mime  : "foo"
-     }
+addTest('Response (headers)',
+         'http://localhost:8080/response (headers)',
+         {
+            status: 200,
+            mime  : "foo"
+         }
 );

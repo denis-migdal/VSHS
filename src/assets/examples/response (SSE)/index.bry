@@ -32,7 +32,7 @@ async def callback(writer):
         print(f"Error: {e}")
         writer.abort();
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     
     t = self.TransformStream.new()
 

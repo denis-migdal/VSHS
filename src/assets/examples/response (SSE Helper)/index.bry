@@ -13,6 +13,6 @@ async def callback(writer, *args):
 
     writer.close()
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     args = []
     return self.VSHS.SSEResponse(callback, {}, *args)

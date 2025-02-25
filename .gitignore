@@ -1,6 +1,5 @@
+build/TS
 node_modules/
+dist/dev
 package-lock.json
-tsconfig.tsbuildinfo
-dist/src
-dist/libs
 deno.lock

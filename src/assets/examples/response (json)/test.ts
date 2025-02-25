@@ -1,11 +1,11 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import addTest from "TESTS";
 
-test('Response (json)',
-     'http://localhost:8080/response (json)',
-     {
-        status: 200,
-        body  : '{"a":42}',
-        mime  : 'application/json'
-     }
+addTest('Response (json)',
+         'http://localhost:8080/response (json)',
+         {
+            status: 200,
+            body  : '{"a":42}',
+            mime  : 'application/json'
+         }
 );

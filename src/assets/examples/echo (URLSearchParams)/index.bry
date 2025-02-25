@@ -2,7 +2,7 @@
 
 from browser import self
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     received = await request.formData()
     received = self.URLSearchParams.new(received)
     return self.Response.new(received)

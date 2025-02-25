@@ -4,5 +4,5 @@ from browser import self
 
 response = self.Response.new("ok");
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     return response.clone()

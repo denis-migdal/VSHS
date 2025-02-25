@@ -1,5 +1,5 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import test from "TESTS";
 
 test('Hello World',
      'http://localhost:8080/Hello World',

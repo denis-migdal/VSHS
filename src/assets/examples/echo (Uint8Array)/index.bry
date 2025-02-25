@@ -2,6 +2,6 @@
 
 from browser import self
 
-async def RequestHandler(request, _):
+async def DefaultExport(request, _):
     received = await request.bytes()
     return self.Response.new(received)

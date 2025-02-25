@@ -1,11 +1,11 @@
 {
-    "include": ["src", "examples/echo (route)", "examples/echo (route_vars)"],
+    "include": ["src", "tests"],
+    "exclude": ["tests", "VSHS.ts"],
     "compilerOptions": {
-        "rootDir": ".",
-        "outDir": "./dist/",
-        "baseUrl": "./",
+        "outDir": "./build/TS/",
         "paths": {
-        "*": ["src/*", "libs/*"]
+            "@VSHS/*": ["./src/*"],
+            "@LISS/*": ["./libs/LISS/V3/*"]
         },
         "sourceMap": true,
         "alwaysStrict": true,
@@ -16,7 +16,6 @@
         "noFallthroughCasesInSwitch": true,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
-        "allowImportingTsExtensions": true,
 
         "module": "esnext",
         "target": "esnext",

@@ -4,6 +4,7 @@
     "test" : "deno test --allow-net ./src/assets/examples/"
   },
   "imports": {
-    "VSHS": "./VSHS.ts"
+    "VSHS": "./VSHS.ts",
+    "TESTS": "./tests/addTest.ts"
   }
 }

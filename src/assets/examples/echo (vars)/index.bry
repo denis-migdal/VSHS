@@ -2,5 +2,5 @@
 
 from browser import self
 
-async def RequestHandler(request, route):
+async def DefaultExport(request, route):
     return self.Response.json(route.vars)

@@ -1,10 +1,10 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import addTest from "TESTS";
 
-test('Response (Uint8Array)',
-     'http://localhost:8080/response (Uint8Array)',
-     {
-        status: 200,
-        body  : "Hello"
-     }
+addTest('Response (Uint8Array)',
+         'http://localhost:8080/response (Uint8Array)',
+         {
+            status: 200,
+            body  : "Hello"
+         }
 );

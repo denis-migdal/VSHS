@@ -8,7 +8,9 @@
     },
     "scripts": {
         "build": "clear ; webpack --no-watch --mode=development",
-        "watch": "clear ; webpack --watch    --mode=development"
+        "build-prod": "clear ; webpack --no-watch --mode=production",
+        "watch": "clear ; webpack --watch    --mode=development",
+        "tests": "clear ; deno task test ;"
     },
     "author": "[AUTHOR]",
     "license": "[LICENCE]",

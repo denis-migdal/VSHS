@@ -1,0 +1,9 @@
+- fr:🇫🇷
+    - getting-started:🚀 Prise en main
+    - server:🕮 Démarrer et requêter le serveur HTTP
+    - response:🕮 Construire une réponse HTTP (à retourner)
+    - request:🕮 Lire une requête HTTP reçue
+    - routes:🕮 Définir une route
+- en:🇬🇧
+- playground:🧪 Playground
+- https://github.com/denis-migdal/VSHS:⭐ Github

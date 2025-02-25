@@ -1,7 +1,7 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import addTest from "TESTS";
 
-test('Response (SSE)',
+addTest('Response (SSE)',
      'http://localhost:8080/response (SSE)',
      {
         status: 200,

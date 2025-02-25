@@ -1,6 +1,6 @@
-import "../../../libs/LISS/src/pages/docs/skeleton/";
+import "@VSHS/pages/skeleton/";
 
-import "./code/vshs-playground/VSHSPlayground";
+import "@VSHS/components/vshs-playground/";
 
 
 const examples = [

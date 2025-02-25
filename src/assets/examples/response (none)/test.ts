@@ -1,10 +1,10 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import addTest from "TESTS";
 
-test('Response (none)',
-     'http://localhost:8080/response (none)',
-     {
-        status: 200,
-        body  : null
-     }
+addTest('Response (none)',
+         'http://localhost:8080/response (none)',
+         {
+            status: 200,
+            body  : null
+         }
 );

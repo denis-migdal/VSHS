@@ -1,10 +1,10 @@
 // @ts-ignore
-import {test} from "../../../../tests_helper.ts";
+import addTest from "TESTS";
 
-test('Response (throw response)',
-     'http://localhost:8080/response (throw response)',
-     {
-        status: 501,
-        statusText: "Not Implemented"
-     }
+addTest('Response (throw response)',
+         'http://localhost:8080/response (throw response)',
+         {
+            status: 501,
+            statusText: "Not Implemented"
+         }
 );
