@@ -1,6 +1,6 @@
 name: Generate dist files
 
-on: []
+on: [VX]
 
 jobs:
   gen_dist_files:
