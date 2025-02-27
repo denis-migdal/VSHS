@@ -1,8 +1,8 @@
-const WF = require("./build/WebpackFramework");
+import buildConfigs from "./build/WebpackFramework/index.js";
 
-module.exports = WF.buildConfigs("./src/",
-                                 "./dist/${version}/",
-                                {
-                                    "@LISS": "libs/LISS/V3/",
-                                    "@VSHS": "src/"
-                                });
+export default buildConfigs("./src/",
+                            "./dist/${version}/",
+                            {
+                                "@LISS": "libs/LISS/V3/",
+                                "@VSHS": "src/"
+                            });
