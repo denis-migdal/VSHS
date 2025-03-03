@@ -29,7 +29,7 @@ Erreur non-capturée	--internal-error*/
 	startHTTPServer({
 		port          : args.port ?? 8080,
 		hostname      : args.host ?? "localhost",
-		routes        : args._[0] as string,
+		routes        : args._[0] as string | Record<string, Handler>,
 		assets        : args.assets,
 		assets_prefix : args.assets_prefix,
 		default       : args.default,
@@ -71,12 +71,14 @@ export default async function startHTTPServer({ port = 8080,
 												logger = () => {}
 											}: Partial<HTTPServerOpts>) {
 
-	let routesHandlers: Routes = routes as any;
+	let routesHandlers: Routes;
 	if( typeof routes === "string" ) {
 		if(routes[0] === "/")
 			routes = rootDir() + routes;
 			
 		routesHandlers = await loadAllRoutesHandlers(routes);
+	} else {
+		routesHandlers = Object.entries(routes);
 	}
 	
 	if(assets?.[0] === "/")
@@ -169,8 +171,8 @@ export const VSHS = {
 let mimelite: any = null;
 async function loadMime() {
 	if( mimelite === null )
-		mimelite = import( /* webpackIgnore: true */ "jsr:https://deno.land/x/mimetypes@v1.0.0/mod.ts");
-	return await mimelite;
+		mimelite = (await import( /* webpackIgnore: true */ "https://deno.land/x/mimetypes/mod.ts")).mimelite;
+	return mimelite;
 }
 
 // @ts-ignore
@@ -377,7 +379,7 @@ async function buildDefaultRoute(assets?: string, assets_prefix: string = "") {
 			return new Response(opts.error!.message, {status: 500});
 
 		let pathname = new URL(request.url).pathname;
-		if( assets === undefined ) {
+		if( assets !== undefined ) {
 
 			let uri = pathname;
 			if( uri.startsWith(assets_prefix) )
